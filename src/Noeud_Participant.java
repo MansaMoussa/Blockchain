@@ -2,10 +2,11 @@ import java.rmi.server.UnicastRemoteObject ;
 import java.rmi.RemoteException ;
 import java.net.InetAddress.* ;
 import java.net.* ;
+import java.math.BigDecimal;
 //import Transaction;
 
 public class Noeud_Participant extends UnicastRemoteObject implements Noeud{
-    public Float earnings_for_work_done;
+    public BigDecimal earnings_for_work_done;
     /*//LEVEL SECURITY
     private String name;
     private Integer private_key;
@@ -20,7 +21,7 @@ public class Noeud_Participant extends UnicastRemoteObject implements Noeud{
         return this.public_key;
     }
 
-    public Float getBlockMoney(){
+    public BigDecimal getBlockMoney(){
         return this.earnings_for_work_done;
     }
     /*

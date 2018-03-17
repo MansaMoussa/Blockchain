@@ -2,12 +2,13 @@ import java.rmi.server.UnicastRemoteObject ;
 import java.rmi.RemoteException ;
 import java.net.InetAddress.* ;
 import java.net.* ;
+import java.math.BigDecimal;
 //import Transaction;
 
 public class Noeud_Block extends UnicastRemoteObject implements Noeud{
-    public Float reward_for_bloc_creation;
+    public BigDecimal reward_for_bloc_creation;
     public Integer max_participant;
-    public Blockchain my_blockchain;
+    public Blockchain my_blockchain;  //doit être le même chez tout le monde
     public List Noeud_Participant participants; //Ceux qui sont inscrits à moi
     public List Transaction waiting_list;//liste des opérations à transcrire
     /* //LEVEL SECURITY
@@ -28,12 +29,13 @@ public class Noeud_Block extends UnicastRemoteObject implements Noeud{
         return this.public_key;
     }
 
-    public Float getBlockMoney(){
+    public BigDecimal getBlockMoney(){
         return this.reward_for_bloc_creation;
     }
 
-    public Bool valid_transaction(Blockchain b){
+    public Bool valid_transaction(Transaction t){
         //Possède t-il ce qu'il veut dépenser?
+        //Vérifions ça dans la blockchain
     }
 
     public void write_transaction(Transaction t){
@@ -42,6 +44,10 @@ public class Noeud_Block extends UnicastRemoteObject implements Noeud{
         if(t.getType() == 'E' && this.valid_transaction()){
             //Add this shit in la liste d'attente
         }
+    }
+
+    public void order_create_block(Noeud_Block nB){
+      //On doit lui dire qu'il crée un block dans sa liste d'attente(?)
     }
 
 }
