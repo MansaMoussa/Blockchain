@@ -83,7 +83,6 @@ public class Noeud_Block{
 
         ///////////////////on lance le serveur///////////////////////
         try{
-            //Runtime.getRuntime().exec("rmiregistry "+args[0]);
             System.out.println("\nSERVEEEEER\n");
             BlockchainImpl my_BlockchainImpl = new BlockchainImpl() ;
             Naming.rebind("rmi://localhost:" + args[0] + "/Blockchain" ,my_BlockchainImpl) ;
@@ -102,7 +101,7 @@ public class Noeud_Block{
 
         ///////////////////on lance le client///////////////////////
 
-        {
+        try{
             System.out.println("\nCLIEEEEENT\n");
             BlockchainImpl blockchain_Peer =
                                 (BlockchainImpl) Naming.lookup("rmi://localhost:"+args[1]+"/Blockchain") ;

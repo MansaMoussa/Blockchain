@@ -1,0 +1,13 @@
+#!/bin/bash
+set -v
+
+\rm *.class
+
+
+
+javac *.java
+rmic BlockchainImpl
+
+rmiregistry 2222 & java Noeud_Block 2222 4242
+
+rmiregistry 4242 & java Noeud_Block 4242 2222
