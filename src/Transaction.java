@@ -1,20 +1,18 @@
 import java.math.BigDecimal;
 
 public class Transaction{
-      public char type_;
-      public String from_;
-      public String to_;
-      public BigDecimal value_;
+    private char type;
+    private String data; //selon le type on a des données différentes
 
-      public char getType(){
-          return this.type_;
-      }
+    public char getType(){
+        return this.type;
+    }
 
-      public String getFrom(){
-          return this.from_;
-      }
+    public String getData(){
+        return this.data;
+    }
 
-      public String getTo(){
-          return this.to_;
-      }
+    public String transactionSerialisation(){
+        return type+"~"+data;
+    }
 }
