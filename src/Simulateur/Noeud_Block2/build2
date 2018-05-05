@@ -3,7 +3,7 @@ set -v
 
 \rm *.class
 
-
+pkill java; pkill rmiregistry
 
 javac *.java
 rmic BlockchainImpl
@@ -14,7 +14,11 @@ mv Blockchain.class Blockchain_NB2.class
 
 #On envoit ce dont mon peer aura besoin à l'autre Noeud_Block
 for i in BlockchainImpl_Stub_NB2 Blockchain_NB2
-do  cp $i.class Noeud_Block1 ; done
+do  cp $i.class ../Noeud_Block1 ; done
+
+#On le remmet avec les bons noms pour compatibilité avec les classes existentes
+mv BlockchainImpl_Stub_NB2.class BlockchainImpl_Stub.class
+mv Blockchain_NB2.class Blockchain.class
 
 #I'll be waiting for 5sec in order to let my peer to launch his server
-rmiregistry 4242 & java Noeud_Block1 4242 2222
+rmiregistry 4242 & java Noeud_Block 4242 2222

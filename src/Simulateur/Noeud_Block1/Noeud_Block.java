@@ -95,7 +95,7 @@ public class Noeud_Block{
         ////////////////////on lance la pause////////////////////////
         try{
           Thread.sleep(5000);
-          System.out.println("\nAFTER WAITING\n");
+          System.out.println("\nAFTER WAITING__1\n");
         }catch(InterruptedException v) { System.out.println(v); }
 
 
@@ -110,5 +110,11 @@ public class Noeud_Block{
         catch (NotBoundException re) { System.out.println(re) ; }
         catch (RemoteException re) { System.out.println(re) ; }
         catch (MalformedURLException e) { System.out.println(e) ; }
+
+        ////////////////////on lance la pause avant de quitter////////////////////////
+        try{
+          Thread.sleep(5000);
+          System.out.println("\nAFTER WAITING__2\n");
+        }catch(InterruptedException v) { System.out.println(v); }
     }
 }
