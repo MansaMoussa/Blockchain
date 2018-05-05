@@ -15,6 +15,6 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
 
     public String printBlockchainImpl(Integer numeroNoeud_Block)
     throws RemoteException{
-        return ("Here is the blockchain from "+numeroNoeud_Block);
+        return ("Here is the blockchain from Noeud_Block2 : "+numeroNoeud_Block);
     }
 }

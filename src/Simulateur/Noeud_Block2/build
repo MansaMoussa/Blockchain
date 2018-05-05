@@ -19,6 +19,12 @@ cp BlockchainImpl_Stub_NB2.class ../Noeud_Block1
 mv BlockchainImpl_Stub_NB2.class BlockchainImpl_Stub.class
 mv Blockchain_NB2.class Blockchain.class
 
+
+################################################
+################                ################
+################################################
+
+
 #I'll be waiting for 5sec in order to let my peer to launch his server
 rmiregistry 4242 &
 java -Djava.security.manager -Djava.security.policy=java.policy Noeud_Block 4242 2222
