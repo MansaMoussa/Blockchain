@@ -4,14 +4,13 @@ import java.math.BigDecimal;
 import java.util.LinkedList;
 
 public class Noeud_Block{
-    /*
     public BigDecimal reward_for_bloc_creation;
     public Integer max_participant;
     public LinkedList<Integer> neighbours; //Liste voisins (leurs numeros de port)
     //public BlockchainImpl my_BlockchainImpl;  //doit être le même chez tout le monde
     public LinkedList<Noeud_Participant> participants; //Ceux qui sont inscrits à moi
     public LinkedList<Transaction> waiting_transaction_list;//liste chaînée des opérations à transcrire
-
+/*
     public BigDecimal getBlockMoney(){
         return this.reward_for_bloc_creation;
     }
@@ -35,8 +34,8 @@ public class Noeud_Block{
     }
 
      ?? ou échanger les listes de transactions suffit
-     public Block take_block(Block ){
-
+     public Block take_block(Block b){
+            return b;
      }
 
 
@@ -66,8 +65,8 @@ public class Noeud_Block{
 
     //On ne peut pas chiffrer les opérations/transactions des noeuds participants
     // Sinon on ne saurait pas vérifier si des transactions sont vraies ou pas
-    */
 
+*/
     ///////////////////////////////////////////////////////////////////
     ///////////////////C'est ici que ça se passe///////////////////////
     ///////////////////////////////////////////////////////////////////
