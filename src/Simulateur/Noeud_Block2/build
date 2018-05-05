@@ -1,9 +1,7 @@
 #!/bin/bash
 set -v
 
-\rm *.class
-
-pkill java; pkill rmiregistry
+./destroy
 
 javac *.java
 rmic BlockchainImpl
@@ -14,7 +12,7 @@ mv Blockchain.class Blockchain_NB2.class
 
 #On envoit ce dont mon peer aura besoin à l'autre Noeud_Block
 for i in BlockchainImpl_Stub_NB2 Blockchain_NB2
-do  cp $i.class ../Noeud_Block1 ; done
+do  cp $i.class ../Noeud_Block1 ../Noeud_Participant3_NB2; done
 
 #On le remmet avec les bons noms pour compatibilité avec les classes existentes
 mv BlockchainImpl_Stub_NB2.class BlockchainImpl_Stub.class
