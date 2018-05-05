@@ -1,18 +1,19 @@
 #!/bin/bash
 set -v
 
-./destroy
+# TOUJOURS ./destroy avant de .build
 
 javac *.java
 rmic BlockchainImpl
 
-#On personnalise les noms deq class qu'on enverra à l'autre Noeud_Block
-mv BlockchainImpl_Stub.class BlockchainImpl_Stub_NB2.class
-mv Blockchain.class Blockchain_NB2.class
+#On envoit ce dont le Participant3 aura besoin
+cp BlockchainImpl_Stub.class ../Noeud_Participant3_NB2
 
-#On envoit ce dont mon peer aura besoin à l'autre Noeud_Block
-for i in BlockchainImpl_Stub_NB2 Blockchain_NB2
-do  cp $i.class ../Noeud_Block1 ../Noeud_Participant3_NB2; done
+#On personnalise les noms des class qu'on enverra à l'autre Noeud_Block
+mv BlockchainImpl_Stub.class BlockchainImpl_Stub_NB2.class
+
+#On envoit ce dont mon peer NB1 aura besoin
+cp BlockchainImpl_Stub_NB2.class ../Noeud_Block1
 
 #On le remmet avec les bons noms pour compatibilité avec les classes existentes
 mv BlockchainImpl_Stub_NB2.class BlockchainImpl_Stub.class
@@ -20,4 +21,4 @@ mv Blockchain_NB2.class Blockchain.class
 
 #I'll be waiting for 5sec in order to let my peer to launch his server
 rmiregistry 4242 &
-java Noeud_Block 4242 2222
+java -Djava.security.manager -Djava.security.policy=java.policy Noeud_Block 4242 2222

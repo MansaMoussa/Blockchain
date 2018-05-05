@@ -1,0 +1,8 @@
+#!/bin/bash
+set -v
+
+# TOUJOURS ./destroy avant de .build
+
+javac *.java
+
+java Noeud_Participant 4242

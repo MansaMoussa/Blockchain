@@ -47,7 +47,7 @@ public class Noeud_Participant{
               System.out.println("\nCLIEEEEENT\n");
               Blockchain blockchain_Peer =
                                   (Blockchain) Naming.lookup("rmi://localhost:"+args[0]+"/Blockchain") ;
-              System.out.println("Le client "+args[0]+" recoit : "+blockchain_Peer.printBlockchainImpl(new Integer(args[1])) +"\n") ;
+              System.out.println("Le Noeud_Participant ici présent recoit : "+blockchain_Peer.printBlockchainImpl(new Integer(args[0])) +"\n") ;
           }
           catch (NotBoundException re) { System.out.println(re) ; }
           catch (RemoteException re) { System.out.println(re) ; }

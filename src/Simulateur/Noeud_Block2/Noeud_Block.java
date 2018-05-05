@@ -90,11 +90,10 @@ public class Noeud_Block{
         }
         catch (RemoteException re) { System.out.println(re); re.printStackTrace();}
         catch (MalformedURLException e) { System.out.println(e); e.printStackTrace();}
-        catch (Exception e){ System.out.println(e); e.printStackTrace();};
 
         ////////////////////on lance la pause////////////////////////
         try{
-          Thread.sleep(5000);
+          Thread.sleep(10000);
           System.out.println("\nAFTER WAITING__1\n");
         }catch(InterruptedException v) { System.out.println(v); }
 
