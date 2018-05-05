@@ -103,8 +103,8 @@ public class Noeud_Block{
 
         try{
             System.out.println("\nCLIEEEEENT\n");
-            BlockchainImpl blockchain_Peer =
-                                (BlockchainImpl) Naming.lookup("rmi://localhost:"+args[1]+"/Blockchain") ;
+            Blockchain blockchain_Peer =
+                                (Blockchain) Naming.lookup("rmi://localhost:"+args[1]+"/Blockchain") ;
             System.out.println("Le client "+args[0]+" recoit : "+blockchain_Peer.printBlockchainImpl(new Integer(args[1])) +"\n") ;
         }
         catch (NotBoundException re) { System.out.println(re) ; }

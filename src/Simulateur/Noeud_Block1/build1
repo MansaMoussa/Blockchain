@@ -21,4 +21,5 @@ mv BlockchainImpl_Stub_NB1.class BlockchainImpl_Stub.class
 mv Blockchain_NB1.class Blockchain.class
 
 #I'll be waiting for 5sec in order to let my peer to launch his server
-rmiregistry 2222 & java Noeud_Block 2222 4242
+rmiregistry 2222 &
+java Noeud_Block 2222 4242
