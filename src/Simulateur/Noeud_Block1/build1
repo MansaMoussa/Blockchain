@@ -1,0 +1,20 @@
+#!/bin/bash
+set -v
+
+\rm *.class
+
+
+
+javac *.java
+rmic BlockchainImpl
+
+#On personnalise les noms deq class qu'on enverra à l'autre Noeud_Block
+mv BlockchainImpl_Stub.class BlockchainImpl_Stub_NB1.class
+mv Blockchain.class Blockchain_NB1.class
+
+#On envoit ce dont mon peer aura besoin à l'autre Noeud_Block
+for i in BlockchainImpl_Stub_NB1 Blockchain_NB1
+do  cp $i.class Noeud_Block2 ; done
+
+#I'll be waiting for 5sec in order to let my peer to launch his server
+rmiregistry 2222 & java Noeud_Block 2222 4242
