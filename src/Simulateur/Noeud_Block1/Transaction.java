@@ -1,4 +1,5 @@
 import java.math.BigDecimal;
+import java.lang.StringBuilder;
 
 public class Transaction{
     private char type;
@@ -12,10 +13,12 @@ public class Transaction{
         return this.data;
     }
 
-    public void printTransaction(){
-      System.out.println("\n#*\t\tTranction_type : "+this.type+"\t\t*#");
-      System.out.println("\n#*\t\tTranction_data : "+this.data+"\t\t*#");
-      System.out.println("\n#****************************************#");
+    public StringBuilder printTransaction(StringBuilder display){
+      display.append("\n#----\t\t\tTranction_type : "+this.type+"\t\t\t----#");
+      display.append("\n#----\t\t\tTranction_data : "+this.data+"\t\t\t----#");
+      display.append("\n#-----------------------------------------#");
+
+      return display;
     }
 
     public String transactionSerialisation(){

@@ -8,7 +8,7 @@ public class Noeud_Block{
     public Integer max_participant;
     public LinkedList<Integer> neighbours; //Liste voisins (leurs numeros de port)
     //public BlockchainImpl my_BlockchainImpl;  //doit être le même chez tout le monde
-    public LinkedList<Noeud_Participant> participants; //Ceux qui sont inscrits à moi
+    //public LinkedList<Noeud_Participant> participants; //Ceux qui sont inscrits à moi
     public LinkedList<Transaction> waiting_transaction_list;//liste chaînée des opérations à transcrire
 /*
     public BigDecimal getBlockMoney(){
@@ -34,8 +34,8 @@ public class Noeud_Block{
     }
 
      ?? ou échanger les listes de transactions suffit
-     public Block take_block(Block ){
-
+     public Block take_block(Block b){
+            return b;
      }
 
 
@@ -82,10 +82,9 @@ public class Noeud_Block{
 
         ///////////////////on lance le serveur///////////////////////
         try{
-            System.out.println("\nSERVEEEEER\n");
             BlockchainImpl my_BlockchainImpl = new BlockchainImpl() ;
             Naming.rebind("rmi://localhost:" + args[0] + "/Blockchain" ,my_BlockchainImpl) ;
-            System.out.println("\nServeur Noeud_Block (Number : "+args[0]+") READY!!\n") ;
+            System.out.println("\nSERVER Noeud_Block AT PORT "+args[0]+" LAUNCHED!!\n") ;
         }
         catch (RemoteException re) { System.out.println(re); re.printStackTrace();}
         catch (MalformedURLException e) { System.out.println(e); e.printStackTrace();}
@@ -93,17 +92,16 @@ public class Noeud_Block{
         ////////////////////on lance la pause////////////////////////
         try{
           Thread.sleep(10000);
-          System.out.println("\nAFTER WAITING__1\n");
         }catch(InterruptedException v) { System.out.println(v); }
 
 
         ///////////////////on lance le client///////////////////////
 
         try{
-            System.out.println("\nCLIEEEEENT\n");
             Blockchain blockchain_Peer =
                                 (Blockchain) Naming.lookup("rmi://localhost:"+args[1]+"/Blockchain") ;
-            System.out.println("Le client "+args[0]+" recoit : "+blockchain_Peer.printBlockchainImpl(new Integer(args[1])) +"\n") ;
+            System.out.println("\nTHE CLIENT "+args[0]+" RECEIVE :\n");
+            System.out.println(blockchain_Peer.printBlockchainImpl());
         }
         catch (NotBoundException re) { System.out.println(re) ; }
         catch (RemoteException re) { System.out.println(re) ; }
@@ -112,7 +110,6 @@ public class Noeud_Block{
         ////////////////////on lance la pause avant de quitter////////////////////////
         try{
           Thread.sleep(5000);
-          System.out.println("\nAFTER WAITING__2\n");
         }catch(InterruptedException v) { System.out.println(v); }
     }
 }

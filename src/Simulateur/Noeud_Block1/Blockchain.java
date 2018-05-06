@@ -1,6 +1,7 @@
 import java.rmi.Remote ;
 import java.rmi.RemoteException ;
+import java.lang.StringBuilder;
 
 public interface Blockchain extends Remote{
-    public String printBlockchainImpl(Integer numeroNoeud_Block) throws RemoteException ;
+    public StringBuilder printBlockchainImpl() throws RemoteException ;
 }

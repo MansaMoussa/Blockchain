@@ -1,5 +1,6 @@
 import java.util.LinkedList;
 import java.math.BigDecimal;
+import java.lang.StringBuilder;
 
 public class Block{
     private BigDecimal profondeur;
@@ -15,18 +16,20 @@ public class Block{
         this.transactionsList = transactionsList;
     }
 
-    public void printBlock(){
-        System.out.println("\n##########################################");
-        System.out.println("\n#****************************************#");
-        System.out.println("\n#*\t\tDeep : "+this.profondeur+"\t\t*#");
-        System.out.println("\n#****************************************#");
-        System.out.println("\n#*\t\tHash : "+this.hash+"\t\t*#");
-        System.out.println("\n#****************************************#");
-        System.out.println("\n#*\t\tCreator : "+this.creator+"\t\t*#");
-        System.out.println("\n#****************************************#");
+    public StringBuilder printBlock(StringBuilder display){
+        display.append("\n#*****************************************#");
+        display.append("\n#-----------------------------------------#");
+        display.append("\n#----\t\t\tDeep : "+this.profondeur+"\t\t\t----#");
+        display.append("\n#----------------------------------------#");
+        display.append("\n#----\t\t\tHash : "+this.hash+"\t\t\t----#");
+        display.append("\n#----------------------------------------#");
+        display.append("\n#----\t\t\tCreator : "+this.creator+"\t\t\t----#");
+        display.append("\n#-----------------------------------------#");
         for(Transaction t : transactionsList)
-            t.printTransaction();
-        System.out.println("\n##########################################");
+            t.printTransaction(display);
+        display.append("\n#*****************************************#");
+
+        return display;
     }
 
     public String blockSerialisation(){
@@ -36,7 +39,7 @@ public class Block{
             transactionsString = transactionsString + "~"
                                                 + t.transactionSerialisation();
 
-        return profondeur+"~"+hash+"~"+creator+"~"+transactionsString+"~";
+        return "~"+profondeur+"~"+hash+"~"+creator+"~"+transactionsString+"~";
     }
 
 

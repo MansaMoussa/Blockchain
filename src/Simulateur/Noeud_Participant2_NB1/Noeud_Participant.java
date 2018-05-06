@@ -44,10 +44,10 @@ public class Noeud_Participant{
           System.out.println("Usage : java Noeud_Participant <port du serveur à qui je veux demande des services>") ;
       else{
           try{
-              System.out.println("\nCLIEEEEENT\n");
               Blockchain blockchain_Peer =
                                   (Blockchain) Naming.lookup("rmi://localhost:"+args[0]+"/Blockchain") ;
-              System.out.println("Le Noeud_Participant ici présent recoit : "+blockchain_Peer.printBlockchainImpl(new Integer(args[0])) +"\n") ;
+              System.out.println(blockchain_Peer.printBlockchainImpl());
+
           }
           catch (NotBoundException re) { System.out.println(re) ; }
           catch (RemoteException re) { System.out.println(re) ; }
