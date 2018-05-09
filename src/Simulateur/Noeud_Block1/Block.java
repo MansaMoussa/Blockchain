@@ -3,12 +3,20 @@ import java.math.BigDecimal;
 import java.lang.StringBuilder;
 
 public class Block{
+    //A quel profondeur de la blockchain se situe ce block
     private BigDecimal profondeur;
+    //Hash du block précedent
+    private String hashPreviousBlock;
+    //Hash de mon block
     private String hash;
-    private String creator; //Nom du Noeud_Block qui crée ce Block
+    //The name of the Noeud_Block who create this Block
+    private String creator;
+    //Le nombre qu'on va essayer de modifier jusqu'à trouver un bon hash
+    private BigDecimal nonce;
+    //List of Transactions that are inside of the block
     private LinkedList<Transaction> transactionsList;
 
-    public void Block(BigDecimal prof, String hashPreviousBlock,
+    public Block(BigDecimal prof, String hashPreviousBlock,
                   String creatorName, LinkedList<Transaction> transactionsList){
         this.profondeur = prof;
         this.hash = hashPreviousBlock;
@@ -30,6 +38,10 @@ public class Block{
         display.append("\n#*****************************************#");
 
         return display;
+    }
+
+    public BigDecimal getHeight(){
+        return this.profondeur;
     }
 
     public String blockSerialisation(){

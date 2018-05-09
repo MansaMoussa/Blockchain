@@ -5,12 +5,16 @@ import java.util.LinkedList;
 import java.lang.StringBuilder;
 
 public class Noeud_Block{
-    public BigDecimal reward_for_bloc_creation;
-    public Integer max_participant;
-    public LinkedList<Integer> neighbours; //Liste voisins (leurs numeros de port)
-    //public BlockchainImpl my_BlockchainImpl;  //doit être le même chez tout le monde
-    //public LinkedList<Noeud_Participant> participants; //Ceux qui sont inscrits à moi
-    public LinkedList<Transaction> waiting_transaction_list;//liste chaînée des opérations à transcrire
+    public static BigDecimal reward_for_bloc_creation;
+    public static Integer max_participant = 10;
+    //Liste voisins (leurs numeros de port)
+    public static LinkedList<Integer> neighbours;
+    //my blockchain that I share to others or update when others share theirs
+    public static BlockchainImpl my_BlockchainImpl;
+    //Ceux qui sont inscrits à moi
+    //public LinkedList<Noeud_Participant> participants;
+    //liste chaînée des opérations à transcrire
+    public static LinkedList<Transaction> waiting_transaction_list;
 /*
     public BigDecimal getBlockMoney(){
         return this.reward_for_bloc_creation;
@@ -33,11 +37,6 @@ public class Noeud_Block{
     public void order_create_block(Noeud_Block nB){
         //On doit lui dire qu'il crée un block dans sa liste d'attente(?)
     }
-
-     ?? ou échanger les listes de transactions suffit
-     public Block take_block(Block b){
-            return b;
-     }
 
 
     //Je demande à voisin
@@ -83,8 +82,8 @@ public class Noeud_Block{
 
         ///////////////////on lance le serveur///////////////////////
         try{
-            BlockchainImpl my_BlockchainImpl = new BlockchainImpl() ;
-            Naming.rebind("rmi://localhost:" + args[0] + "/Blockchain" ,my_BlockchainImpl) ;
+            my_BlockchainImpl = new BlockchainImpl(); //My blockchain is created
+            Naming.rebind("rmi://localhost:"+args[0]+"/Blockchain",my_BlockchainImpl) ;
             System.out.println("\nSERVER Noeud_Block AT PORT "+args[0]+" LAUNCHED!!\n") ;
         }
         catch (RemoteException re) { System.out.println(re); re.printStackTrace();}
@@ -97,11 +96,9 @@ public class Noeud_Block{
 
 
         ///////////////////on lance le client///////////////////////
-
         try{
             Blockchain blockchain_Peer =
-                                (Blockchain) Naming.lookup("rmi://localhost:"+args[1]+"/Blockchain") ;
-            System.out.println("\nTHE CLIENT "+args[0]+" RECEIVE :\n");
+                                (Blockchain) Naming.lookup("rmi://localhost:"+args[1]+"/Blockchain");
             System.out.println(blockchain_Peer.printBlockchainImpl());
         }
         catch (NotBoundException re) { System.out.println(re) ; }
