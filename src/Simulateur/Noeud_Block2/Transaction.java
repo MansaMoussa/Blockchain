@@ -14,8 +14,8 @@ public class Transaction{
     }
 
     public StringBuilder printTransaction(StringBuilder display){
-      display.append("\n#----\t\t\tTranction_type : "+this.type+"\t\t\t----#");
-      display.append("\n#----\t\t\tTranction_data : "+this.data+"\t\t\t----#");
+      display.append("\n#-----\tTranction_type : "+this.type+"\t-----#");
+      display.append("\n#-----\tTranction_data : "+this.data+"\t-----#");
       display.append("\n#-----------------------------------------#");
 
       return display;

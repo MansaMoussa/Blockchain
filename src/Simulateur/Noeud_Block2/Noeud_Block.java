@@ -38,11 +38,6 @@ public class Noeud_Block{
         //On doit lui dire qu'il crée un block dans sa liste d'attente(?)
     }
 
-     ?? ou échanger les listes de transactions suffit
-     public Block take_block(Block b){
-            return b;
-     }
-
 
     //Je demande à voisin
     public void send_part_of_BlockchainImpl(int from_hauteur, Noeud_Block voisin){
@@ -85,6 +80,8 @@ public class Noeud_Block{
             System.exit(0) ;
         }
 
+        int breakTime = 10000;
+
         ///////////////////on lance le serveur///////////////////////
         try{
             my_BlockchainImpl = new BlockchainImpl(); //My blockchain is created
@@ -96,7 +93,7 @@ public class Noeud_Block{
 
         ////////////////////on lance la pause////////////////////////
         try{
-          Thread.sleep(10000);
+          Thread.sleep(breakTime);
         }catch(InterruptedException v) { System.out.println(v); }
 
 
@@ -112,7 +109,7 @@ public class Noeud_Block{
 
         ////////////////////on lance la pause avant de quitter////////////////////////
         try{
-          Thread.sleep(5000);
+          Thread.sleep(breakTime);
         }catch(InterruptedException v) { System.out.println(v); }
     }
 }

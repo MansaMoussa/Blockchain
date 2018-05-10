@@ -80,18 +80,22 @@ public class Noeud_Block{
             System.exit(0) ;
         }
 
+        int breakTime = 10000;
+
         ///////////////////on lance le serveur///////////////////////
         try{
             my_BlockchainImpl = new BlockchainImpl(); //My blockchain is created
             Naming.rebind("rmi://localhost:"+args[0]+"/Blockchain",my_BlockchainImpl) ;
             System.out.println("\nSERVER Noeud_Block AT PORT "+args[0]+" LAUNCHED!!\n") ;
+            waiting_transaction_list = new LinkedList<>();
+            my_BlockchainImpl = my_BlockchainImpl.createNewBlock(waiting_transaction_list, 10);
         }
         catch (RemoteException re) { System.out.println(re); re.printStackTrace();}
         catch (MalformedURLException e) { System.out.println(e); e.printStackTrace();}
 
         ////////////////////on lance la pause////////////////////////
         try{
-          Thread.sleep(10000);
+          Thread.sleep(breakTime);
         }catch(InterruptedException v) { System.out.println(v); }
 
 
@@ -107,7 +111,7 @@ public class Noeud_Block{
 
         ////////////////////on lance la pause avant de quitter////////////////////////
         try{
-          Thread.sleep(5000);
+          Thread.sleep(breakTime);
         }catch(InterruptedException v) { System.out.println(v); }
     }
 }
