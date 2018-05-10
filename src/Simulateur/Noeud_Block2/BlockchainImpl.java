@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
 
-    //liste chaînée des Block-s (qui ont max 10 kBytes?)
+
     public LinkedList<Block> blocksList;
 
     public BlockchainImpl() throws RemoteException{

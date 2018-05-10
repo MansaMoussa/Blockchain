@@ -21,6 +21,11 @@ public class Transaction{
       return display;
     }
 
+    public boolean equals(Transaction t){
+        return  (this.type == t.getType()) &&
+                this.data.equals(t.getData());
+    }
+
     public String transactionSerialisation(){
         return this.type+"~"+this.data+"~";
     }

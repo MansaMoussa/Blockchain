@@ -48,6 +48,11 @@ public class Block{
         return display;
     }
 
+    //Retourne la liste de transactions de ce Block
+    public LinkedList<Transaction> getTransactionsList(){
+        return this.transactionsList;
+    }
+
     //Retourne la profondeur du Block
     public BigDecimal getHeight(){
         return this.profondeur;

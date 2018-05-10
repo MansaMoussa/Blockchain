@@ -49,15 +49,6 @@ public class Noeud_Block{
         //Valide sera la première reçu
     }
 
-    public void check_waitingListTransaction_vs_blockTransaction(Block lastBlock){
-        //On va supprimer les opérations de la wainting_list déjà contenu dans le block
-    }
-
-    public void print_all_BlockchainImpl(){
-        //afin de visualiser la BlockchainImpl
-        //le nombre de blocks et le contenu de chaque bloc
-    }
-
     public void check_blochain_no_corruption(BlockchainImpl b){
         //Ici on pourrait simplement vérifier si chaque hash_précedent est
         //vraiment le vrai (en recalculant le trucZer)
@@ -67,6 +58,16 @@ public class Noeud_Block{
     // Sinon on ne saurait pas vérifier si des transactions sont vraies ou pas
 
 */
+    //On va supprimer les opérations de la wainting_list déjà contenu dans le block
+    //On va supprimer ceux qui ont déjà été validées (ceux qui sont déjà dans le lastBlock)
+    public void check_waitingListTransaction_vs_blockTransaction(Block lastBlock){
+        for(Transaction wainting_transaction : waiting_transaction_list)
+          for(Transaction block_transaction : lastBlock.getTransactionsList())
+              if(wainting_transaction.equals(block_transaction))
+                  waiting_transaction_list.remove(wainting_transaction);
+    }
+
+
     ///////////////////////////////////////////////////////////////////
     ///////////////////C'est ici que ça se passe///////////////////////
     ///////////////////////////////////////////////////////////////////
