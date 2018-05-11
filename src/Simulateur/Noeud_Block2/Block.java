@@ -29,21 +29,21 @@ public class Block{
 
 
     public StringBuilder printBlock(StringBuilder display){
-        display.append("\n#*****************************************#");
-        display.append("\n#-----------------------------------------#");
-        display.append("\n#----------\t Deep : "+this.profondeur+"\t----------#");
-        display.append("\n#-----------------------------------------#");
-        display.append("\n#--------  Creator : "+this.creator+"  -------#");
-        display.append("\n#-----------------------------------------#");
+        display.append("\n#***************************************************#");
+        display.append("\n#---------------------------------------------------#");
+        display.append("\n#--\t\tDeep  :  "+this.profondeur);
+        display.append("\n#---------------------------------------------------#");
+        display.append("\n#--\t\tCreator  :  "+this.creator);
+        display.append("\n#---------------------------------------------------#");
         display.append("\n#-- HashPreviousBlock : "+this.hashPreviousBlock);
-        display.append("\n#-----------------------------------------#");
+        display.append("\n#---------------------------------------------------#");
         display.append("\n#-- Hash : "+this.myHash);
-        display.append("\n#-----------------------------------------#");
+        display.append("\n#---------------------------------------------------#");
         display.append("\n#-- Nonce : "+this.nonce);
-        display.append("\n#-----------------------------------------#");
+        display.append("\n#---------------------------------------------------#");
         for(Transaction t : transactionsList)
             t.printTransaction(display);
-        display.append("\n#*****************************************#");
+        display.append("\n#***************************************************#");
 
         return display;
     }
@@ -51,6 +51,10 @@ public class Block{
     //Retourne la liste de transactions de ce Block
     public LinkedList<Transaction> getTransactionsList(){
         return this.transactionsList;
+    }
+
+    public void addTransaction(Transaction t){
+      transactionsList.addFirst(t);
     }
 
     //Retourne la profondeur du Block

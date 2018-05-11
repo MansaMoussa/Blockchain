@@ -13,10 +13,15 @@ public class Transaction{
         return this.data;
     }
 
+    public Transaction(char type, String data){
+      this.type = type;
+      this.data = data;
+    }
+
     public StringBuilder printTransaction(StringBuilder display){
-      display.append("\n#-----\tTranction_type : "+this.type+"\t-----#");
-      display.append("\n#-----\tTranction_data : "+this.data+"\t-----#");
-      display.append("\n#-----------------------------------------#");
+      display.append("\n#--\t\tTranction_type  :  "+this.type);
+      display.append("\n#-- Tranction_data : "+this.data);
+      display.append("\n#---------------------------------------------------#");
 
       return display;
     }

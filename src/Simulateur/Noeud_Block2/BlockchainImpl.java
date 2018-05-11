@@ -10,7 +10,6 @@ import java.util.Random;
 
 public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
 
-
     public LinkedList<Block> blocksList;
 
     public BlockchainImpl() throws RemoteException{
@@ -25,13 +24,13 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
     //serverPort is the port number where this server is launched
     public StringBuilder printBlockchainImpl() throws RemoteException{
         StringBuilder display = new StringBuilder();
-        display.append("\n###########################################");
-        display.append("\n###########################################");
-        display.append("\n#**\tBLOCKCHAIN FROM Noeud_Block2\t**#");
-        display.append("\n#*****************************************#");
+        display.append("\n#####################################################");
+        display.append("\n#####################################################");
+        display.append("\n#**\tBLOCKCHAIN  FROM  Noeud_Block2");
+        display.append("\n#***************************************************#");
         for(Block b : blocksList)
             b.printBlock(display);
-        display.append("\n###########################################");
+        display.append("\n#####################################################");
 
         return display;
     }
@@ -57,19 +56,17 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
     public BlockchainImpl createNewBlock(LinkedList<Transaction> transactionsList, int secondsToSleep)
     throws RemoteException{
         BlockchainImpl bc = new BlockchainImpl(this.blocksList);
-        BigDecimal prof;
+        BigDecimal prof = BigDecimal.ZERO;//
         String creatorName = "Noeud_Block2";
+        String hashPreviousBlock = "6553700000000000000000000";
         boolean time_out = false;
         int i = 0;
         //Vu qu'il doit être dans au moins un des 2 cas en bas
-        String hashPreviousBlock = "Error";
         if(!this.blocksList.isEmpty()){
           hashPreviousBlock = hashBlock(getLastBlock());
           prof = getLastBlock().getHeight();
         }
         else{//La blockchain vient de commencer, donc avant 0 y a pas de bloc
-          hashPreviousBlock = "6553700000";
-          prof = BigDecimal.ZERO;
           i = secondsToSleep; //Comme ça on sort directement de la boucle
           time_out = true; //Comme ça on revoit la même Blockchain
         }
@@ -94,13 +91,16 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
           i++;
         }
 
-        //Si on n'est pas sprti à cause d'un time out, on créee et ajoute le
+        //Si on n'est pas sorti à cause d'un time out, on créee et ajoute le
         //le bloc à la blockchain and we return the edited blockchain
         //otherwise we return the blockchain without an edit
         if(!time_out || primeNumber_found){
             b.setNonce(try_nonce);
             String tmpHash = hashBlock(b);
             b.setMyHash(hashBlock(b));
+            Transaction creationTransaction =
+                    new Transaction('C', creatorName+" creates Block "+prof);
+            b.addTransaction(creationTransaction);
             this.blocksList.addLast(b);
             bc = new BlockchainImpl(this.blocksList);
         }

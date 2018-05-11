@@ -24,7 +24,7 @@ public class Noeud_Participant{
         return this.earnings_for_work_done;
     }
     /*
-    public Bool proof_of_work_for_more_earnings(){
+    public boolean proof_of_work_for_more_earnings(){
 
     }
 
