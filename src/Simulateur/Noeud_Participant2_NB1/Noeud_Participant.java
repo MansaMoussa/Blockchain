@@ -1,38 +1,37 @@
 import java.rmi.*;
 import java.net.MalformedURLException;
 import java.math.BigDecimal;
-//import Transaction;
+import java.math.BigInteger;
+import java.util.Random;
 
 public class Noeud_Participant{
     private BigDecimal earnings_for_work_done;
-    /*//LEVEL SECURITY ??
-    private String name;
-    private Integer private_key;
-    public Integer public_key;
+    private BigDecimal participantID;
 
-    public Bool decrypt(String encrypted_name){ //Pas encore sûr
-        //check if this encrypted name is mine?
-        //otherwise I can't make an Transaction
+    public boolean proof_of_work_for_more_earnings(){
+      boolean answer = false;
+      try{
+        answer =  isPrime((int)Math.random());
+      }catch(Exception e){System.out.println(e); e.printStackTrace();}
+      return answer;
     }
 
-    public Integer getPublicKey(){
-        return this.public_key;
-    }
-    */
+    private boolean isPrime(int number)
+    throws RemoteException{
+        boolean primeNumber_found = true;
+        int sqrt = (int) Math.sqrt(number) + 1;
+        for (int i = 2; i < sqrt; i++)
+            if (number % i == 0) // number is perfectly divisible - no prime
+                primeNumber_found = false;
 
-    public BigDecimal getBlockMoney(){
-        return this.earnings_for_work_done;
-    }
-    /*
-    public Bool proof_of_work_for_more_earnings(){
-
+        return primeNumber_found;
     }
 
-    public void add_earnings_job_done(){
-        if(proof_of_work_for_more_earnings)
-            this.earnings_for_work_done++;
+    public BigDecimal getParticipantID(){
+      return this.participantID;
     }
-    */
+
+
 
     ///////////////////////////////////////////////////////////////////
     ///////////////////C'est ici que ça se passe///////////////////////

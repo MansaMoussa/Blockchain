@@ -153,10 +153,44 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
         // djb2 hash function
         String blockString = b.blockSerialisation();
         BigDecimal hash = new BigDecimal(7);
-        for (int i = 0; i < blockString.length(); i++){
-            hash = (hash.multiply(new BigDecimal(31))).add(new BigDecimal((int) blockString.charAt(i)));
-        }
+        for(int i = 0; i < blockString.length(); i++)
+          hash = (hash.multiply(new BigDecimal(31))).add(new BigDecimal((int) blockString.charAt(i)));
 
         return hash.toString();
     }
+
+    //His money is the sum of all he got minus all he'd sent
+    private BigDecimal howMuchMoneyDoesAParticipantHas(Noeud_Participant nP){
+      BigDecimal moneyReceived = new BigDecimal(0);
+      BigDecimal moneySent = new BigDecimal(0);
+
+      for(Block b : blocksList)
+        for(Transaction t : b.getTransactionsList())
+          moneyReceived = moneyReceived.add(t.moneyReceivedOf(nP.getParticipantID()));
+
+
+      for(Block b : blocksList)
+        for(Transaction t : b.getTransactionsList())
+          moneySent = moneySent.add(t.moneySentOf(nP.getParticipantID()));
+
+
+      return moneyReceived.subtract(moneySent);
+    }
+
+    private BigDecimal sendMoneyFromTo(Noeud_Participant nP1, Noeud_Participant nP2, BigDecimal moneySent){
+      BigDecimal nP1Money = howMuchMoneyDoesAParticipantHas(nP1);
+      BigDecimal sendThis = BigDecimal.ZERO;
+
+       //nP1Money>=moneySent
+      if(nP1Money.compareTo(moneySent) == 1 || nP1Money.compareTo(moneySent) == 0){
+          //Transaction t = new Transaction('E', nP1.participantID+" to "+nP2.participantID+" "+moneySent);
+          //waiting_transaction_list.addLast(t);
+          sendThis = moneySent;
+      }
+
+      return sendThis;
+    }
+
+
+
 }

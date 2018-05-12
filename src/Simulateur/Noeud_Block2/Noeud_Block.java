@@ -20,6 +20,7 @@ public class Noeud_Block{
         return this.reward_for_bloc_creation;
     }
 
+    //Remetre les transactions du bloc non valid dans la liste d'attente
     public Boolean valid_transaction(Transaction t){
         //Possède t-il ce qu'il veut dépenser?
         //Vérifions ça dans la BlockchainImpl
@@ -89,6 +90,10 @@ public class Noeud_Block{
             Naming.rebind("rmi://localhost:"+args[0]+"/Blockchain",my_BlockchainImpl) ;
             System.out.println("\nSERVER Noeud_Block AT PORT "+args[0]+" LAUNCHED!!\n") ;
             waiting_transaction_list = new LinkedList<>();
+            //Si la création est acceptée il faut que les participants reçoivent
+            //de l'argent
+            //On va accumuler l'argent dans le NoeudB si personne ne s'est
+            //encore inscrit
             my_BlockchainImpl = my_BlockchainImpl.createNewBlock(waiting_transaction_list, 10);
         }
         catch (RemoteException re) { System.out.println(re); re.printStackTrace();}
