@@ -12,7 +12,7 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
 
     public LinkedList<Block> blocksList;
 
-    
+
 
     public BlockchainImpl() throws RemoteException{
       super();
@@ -24,11 +24,11 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
     }
 
     //serverPort is the port number where this server is launched
-    public StringBuilder printBlockchainImpl() throws RemoteException{
+    public StringBuilder printBlockchainImpl(String myPort) throws RemoteException{
         StringBuilder display = new StringBuilder();
         display.append("\n#####################################################");
         display.append("\n#####################################################");
-        display.append("\n#**\tBLOCKCHAIN  FROM  Noeud_Block1");
+        display.append("\n#**\tBLOCKCHAIN  FROM  Noeud_Block "+myPort);
         display.append("\n#***************************************************#");
         for(Block b : blocksList)
             b.printBlock(display);
@@ -37,9 +37,9 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
         return display;
     }
 
-    public void printMyBlockchain() throws RemoteException{
+    public void printMyBlockchain(String myPort) throws RemoteException{
         BlockchainImpl b = new BlockchainImpl(blocksList);
-        System.out.println(b.printBlockchainImpl());
+        System.out.println(b.printBlockchainImpl(myPort));
     }
 
     public Blockchain askBlockchain(BigDecimal profondeur) throws RemoteException{
@@ -54,11 +54,11 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
     }
 
     //Here will try to create a new Block
-    public BlockchainImpl createNewBlock(LinkedList<Transaction> transactionsList, int secondsToSleep)
+    public BlockchainImpl createNewBlock(LinkedList<Transaction> transactionsList, int secondsToSleep, String myPort)
     throws RemoteException{
         BlockchainImpl bc = new BlockchainImpl(this.blocksList);
         BigDecimal prof = BigDecimal.ZERO;//
-        String creatorName = "Noeud_Block1";
+        String creatorName = "Noeud_Block "+myPort;
         String hashPreviousBlock = "6553700000000000000000000";
         boolean time_out = false;
         int i = 0;

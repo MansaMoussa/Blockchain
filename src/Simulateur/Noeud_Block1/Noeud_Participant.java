@@ -61,7 +61,7 @@ public class Noeud_Participant implements Serializable{
                                     (NoeudBlock) Naming.lookup("rmi://127.0.0.1:"+args[0]+"/NoeudBlock") ;
 
                 System.out.println("Bonjour je suis le Noeud Participant " + args[1] + ". Je suis connecté au Noeud Block " + args[0]);
-                //System.out.println(blockchain_Peer.printBlockchainImpl());
+                //System.out.println(blockchain_Peer.printBlockchainImpl(args[0]));
 
                 noeudblock_Peer.connectToNoeudBlockParticipant(np);
                 noeudblock_Peer.afficheListParticipants();
@@ -76,7 +76,7 @@ public class Noeud_Participant implements Serializable{
                 try{
                     Blockchain blockchain_Peer =
                                         (Blockchain) Naming.lookup("rmi://localhost:"+args[0]+"/Blockchain") ;
-                    System.out.println(blockchain_Peer.printBlockchainImpl());
+                    System.out.println(blockchain_Peer.printBlockchainImpl(args[0]));
 
                 }
                 catch (NotBoundException re) { System.out.println(re) ; }

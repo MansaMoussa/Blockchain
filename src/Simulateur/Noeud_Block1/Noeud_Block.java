@@ -83,7 +83,7 @@ public class Noeud_Block{
     	// AJOUTER LISTE GLOBALE AVEC PORTS DES NOEUDS BLOCS ET CONNEXION RANDOM D'UN PARTICIPANT AUX NOEUDS
 
 
-    	// 
+    	//
         if (args.length != 4)
         {
             System.out.println("Usage : java Noeud_Block <port de mon serveur> <port de mon peer> <port de mon blockchain> <port de mon peer>") ;
@@ -106,13 +106,13 @@ public class Noeud_Block{
             Naming.rebind("rmi://127.0.0.1:"+args[2]+"/Blockchain",my_NoeudBlockImpl.my_BlockchainImpl) ;
             System.out.println("\nSERVER Block_Chain AT PORT "+args[2]+" LAUNCHED!!\n") ;
 
-            my_NoeudBlockImpl.my_BlockchainImpl = my_NoeudBlockImpl.my_BlockchainImpl.createNewBlock(waiting_transaction_list, 10);
+            my_NoeudBlockImpl.my_BlockchainImpl = my_NoeudBlockImpl.my_BlockchainImpl.createNewBlock(waiting_transaction_list, 10, args[0]);
             waiting_transaction_list = new LinkedList<>();
             //Si la création est acceptée il faut que les participants reçoivent
             //de l'argent
             //On va accumuler l'argent dans le NoeudB si personne ne s'est
             //encore inscrit
-            my_BlockchainImpl = my_BlockchainImpl.createNewBlock(waiting_transaction_list, 10);
+            my_BlockchainImpl = my_BlockchainImpl.createNewBlock(waiting_transaction_list, 10, args[0]);
 
         }
         catch (RemoteException re) { System.out.println(re); re.printStackTrace();}
@@ -138,7 +138,7 @@ public class Noeud_Block{
 
             Blockchain blockchain_Peer =
                                 (Blockchain) Naming.lookup("rmi://127.0.0.1:"+args[3]+"/Blockchain");
-            System.out.println(blockchain_Peer.printBlockchainImpl());
+            System.out.println(blockchain_Peer.printBlockchainImpl(args[0]));
         }
         catch (NotBoundException re) { System.out.println(re) ; }
         catch (RemoteException re) { System.out.println(re) ; }
