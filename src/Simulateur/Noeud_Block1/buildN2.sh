@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 set -v
 
 ################################################################################
@@ -6,33 +6,21 @@ set -v
 ################################################################################
 javac *.java
 rmic BlockchainImpl
-
+rmic NoeudBlockImpl
 ################################################################################
 ################  On envoit ce dont le Participant1 aura besoin ################
 ################################################################################
-cp BlockchainImpl_Stub.class ../Noeud_Participant1_NB1
-
 ################################################################################
 ######### On personnalise les noms de la class qu'on enverra au voisin #########
-################################################################################
-mv BlockchainImpl_Stub.class BlockchainImpl_Stub_NB1.class
-
-################################################################################
 ################   On envoit ce dont mon peer NB2 aura besoin   ################
 ################################################################################
-cp BlockchainImpl_Stub_NB1.class ../Noeud_Block2
-
 ################################################################################
 #On le remmet avec les bons noms pour compatibilité avec les classes existentes#
 ################################################################################
-mv BlockchainImpl_Stub_NB1.class BlockchainImpl_Stub.class
-mv Blockchain_NB1.class Blockchain.class
-
-################################################################################
 ####  I'll be waiting for 5sec in order to let my peer to launch his server ####
 ################################################################################
-rmiregistry 2222 &
-
+rmiregistry 4242 &
+rmiregistry 5678 &
 
 
 
@@ -40,4 +28,4 @@ rmiregistry 2222 &
 #******************************** S T A R T ***********************************#
 #******************************************************************************#
 #******************************* Noeud_Block1 *********************************#
-java -Djava.security.manager -Djava.security.policy=java.policy Noeud_Block 2222 4242
+java -Djava.security.manager -Djava.security.policy=java.policy Noeud_Block 4242 2222 5678 1234

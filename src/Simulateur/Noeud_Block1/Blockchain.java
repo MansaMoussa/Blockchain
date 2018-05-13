@@ -8,4 +8,5 @@ public interface Blockchain extends Remote{
     public StringBuilder printBlockchainImpl() throws RemoteException ;
     //Ask a blockchain of a neighbour, from 0 to profondeur
     public Blockchain askBlockchain(BigDecimal profondeur) throws RemoteException ;
+
 }

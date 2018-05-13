@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 
 public class Noeud_Participant{
     private BigDecimal earnings_for_work_done;
+    private static int participantID = 0;
     /*//LEVEL SECURITY ??
     private String name;
     private Integer private_key;
@@ -20,6 +21,10 @@ public class Noeud_Participant{
     }
     */
 
+    public Noeud_Participant(int id) {
+      id = participantID++;
+    }
+
     public BigDecimal getBlockMoney(){
         return this.earnings_for_work_done;
     }
@@ -34,24 +39,31 @@ public class Noeud_Participant{
     }
     */
 
+    
+
     ///////////////////////////////////////////////////////////////////
     ///////////////////C'est ici que ça se passe///////////////////////
     ///////////////////////////////////////////////////////////////////
 
-    public static void main(String [] args)
+   /* public static void main(String [] args)
     {
+      Noeud_Participant np = new Noeud_Participant(participantID);
       if (args.length != 1)
           System.out.println("Usage : java Noeud_Participant <port du serveur à qui je veux demande des services>") ;
       else{
           try{
-              Blockchain blockchain_Peer =
-                                  (Blockchain) Naming.lookup("rmi://localhost:"+args[0]+"/Blockchain") ;
-              System.out.println(blockchain_Peer.printBlockchainImpl());
+              NoeudBlock noeudblock_Peer =
+                                  (NoeudBlock) Naming.lookup("rmi://localhost:"+args[0]+"/NoeudBlock") ;
+              //System.out.println(blockchain_Peer.printBlockchainImpl());
+
+             // noeudblock_Peer.connectToNoeudBlock(np, noeudblock_Peer.participants);
+
+                                  //donner acces aux participans a la liste des participants du noeud ou envoyer le participant au noeud
 
           }
           catch (NotBoundException re) { System.out.println(re) ; }
           catch (RemoteException re) { System.out.println(re) ; }
           catch (MalformedURLException e) { System.out.println(e) ; }
       }
-    }
+    }*/
 }

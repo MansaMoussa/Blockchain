@@ -7,41 +7,74 @@ public class Block{
     private BigDecimal profondeur;
     //Hash du block précedent
     private String hashPreviousBlock;
-    //Hash de mon block
-    private String hash;
+    //Mon Hash
+    private String myHash;
     //The name of the Noeud_Block who create this Block
     private String creator;
     //Le nombre qu'on va essayer de modifier jusqu'à trouver un bon hash
     private BigDecimal nonce;
+    //List of Transactions that are inside of the block
+    private BigDecimal transactionsNumber;
     //List of Transactions that are inside of the block
     private LinkedList<Transaction> transactionsList;
 
     public Block(BigDecimal prof, String hashPreviousBlock,
                   String creatorName, LinkedList<Transaction> transactionsList){
         this.profondeur = prof;
-        this.hash = hashPreviousBlock;
+        this.hashPreviousBlock = hashPreviousBlock;
         this.creator = creatorName;
         this.transactionsList = transactionsList;
+        this.transactionsNumber = getTransactionsNumber();
     }
 
+
     public StringBuilder printBlock(StringBuilder display){
-        display.append("\n#*****************************************#");
-        display.append("\n#-----------------------------------------#");
-        display.append("\n#----\t\t\tDeep : "+this.profondeur+"\t\t\t----#");
-        display.append("\n#----------------------------------------#");
-        display.append("\n#----\t\t\tHash : "+this.hash+"\t\t\t----#");
-        display.append("\n#----------------------------------------#");
-        display.append("\n#----\t\t\tCreator : "+this.creator+"\t\t\t----#");
-        display.append("\n#-----------------------------------------#");
+        display.append("\n#***************************************************#");
+        display.append("\n#---------------------------------------------------#");
+        display.append("\n#--\t\tDeep  :  "+this.profondeur);
+        display.append("\n#---------------------------------------------------#");
+        display.append("\n#--\t\tCreator  :  "+this.creator);
+        display.append("\n#---------------------------------------------------#");
+        display.append("\n#-- HashPreviousBlock : "+this.hashPreviousBlock);
+        display.append("\n#---------------------------------------------------#");
+        display.append("\n#-- Hash : "+this.myHash);
+        display.append("\n#---------------------------------------------------#");
+        display.append("\n#-- Nonce : "+this.nonce);
+        display.append("\n#---------------------------------------------------#");
         for(Transaction t : transactionsList)
             t.printTransaction(display);
-        display.append("\n#*****************************************#");
+        display.append("\n#***************************************************#");
 
         return display;
     }
 
+    //Retourne la liste de transactions de ce Block
+    public LinkedList<Transaction> getTransactionsList(){
+        return this.transactionsList;
+    }
+
+    public void addTransaction(Transaction t){
+      transactionsList.addFirst(t);
+    }
+
+    //Retourne la profondeur du Block
     public BigDecimal getHeight(){
         return this.profondeur;
+    }
+
+    //Retourne le nombre de transactions
+    public BigDecimal getTransactionsNumber(){
+        return new BigDecimal(transactionsList.size());
+    }
+
+    //On donne une valeur au nonce
+    public void setNonce(BigDecimal nonce){
+        this.nonce = nonce;
+    }
+
+    //On donne une valeur à mon Hash after avoir trouvé le bon nonce
+    public void setMyHash(String hash){
+        this.myHash = hash;
     }
 
     public String blockSerialisation(){
@@ -51,7 +84,8 @@ public class Block{
             transactionsString = transactionsString + "~"
                                                 + t.transactionSerialisation();
 
-        return "~"+profondeur+"~"+hash+"~"+creator+"~"+transactionsString+"~";
+        return "~"+profondeur+"~"+hashPreviousBlock+"~"+nonce+"~"+
+                 creator+"~"+getTransactionsNumber()+"~"+transactionsString+"~";
     }
 
 

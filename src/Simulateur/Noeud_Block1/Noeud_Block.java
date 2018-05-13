@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.lang.StringBuilder;
 
 public class Noeud_Block{
-    public static BigDecimal reward_for_bloc_creation;
+ public static BigDecimal reward_for_bloc_creation;
     public static Integer max_participant = 10;
     //Liste voisins (leurs numeros de port)
     public static LinkedList<Integer> neighbours;
@@ -20,6 +20,7 @@ public class Noeud_Block{
         return this.reward_for_bloc_creation;
     }
 
+    //Remetre les transactions du bloc non valid dans la liste d'attente
     public Boolean valid_transaction(Transaction t){
         //Possède t-il ce qu'il veut dépenser?
         //Vérifions ça dans la BlockchainImpl
@@ -49,15 +50,6 @@ public class Noeud_Block{
         //Valide sera la première reçu
     }
 
-    public void check_waitingListTransaction_vs_blockTransaction(Block lastBlock){
-        //On va supprimer les opérations de la wainting_list déjà contenu dans le block
-    }
-
-    public void print_all_BlockchainImpl(){
-        //afin de visualiser la BlockchainImpl
-        //le nombre de blocks et le contenu de chaque bloc
-    }
-
     public void check_blochain_no_corruption(BlockchainImpl b){
         //Ici on pourrait simplement vérifier si chaque hash_précedent est
         //vraiment le vrai (en recalculant le trucZer)
@@ -67,38 +59,74 @@ public class Noeud_Block{
     // Sinon on ne saurait pas vérifier si des transactions sont vraies ou pas
 
 */
-    ///////////////////////////////////////////////////////////////////
-    ///////////////////C'est ici que ça se passe///////////////////////
-    ///////////////////////////////////////////////////////////////////
-
-
+    //On va supprimer les opérations de la wainting_list déjà contenu dans le block
+    //On va supprimer ceux qui ont déjà été validées (ceux qui sont déjà dans le lastBlock)
+    public void check_waitingListTransaction_vs_blockTransaction(Block lastBlock){
+        for(Transaction wainting_transaction : waiting_transaction_list)
+          for(Transaction block_transaction : lastBlock.getTransactionsList())
+              if(wainting_transaction.equals(block_transaction))
+                  waiting_transaction_list.remove(wainting_transaction);
+    }
     public static void main(String [] args)
     {
-        if (args.length != 2)
+
+
+    	//
+
+
+    	// AJOUTER LISTE GLOBALE AVEC PORTS DES NOEUDS BLOCS ET CONNEXION RANDOM D'UN PARTICIPANT AUX NOEUDS
+
+
+    	// 
+        if (args.length != 4)
         {
-            System.out.println("Usage : java Noeud_Block <port de mon serveur> <port de mon peer>") ;
+            System.out.println("Usage : java Noeud_Block <port de mon serveur> <port de mon peer> <port de mon blockchain> <port de mon peer>") ;
             System.exit(0) ;
         }
 
+        int breakTime = 10000;
+
         ///////////////////on lance le serveur///////////////////////
         try{
-            my_BlockchainImpl = new BlockchainImpl(); //My blockchain is created
-            Naming.rebind("rmi://localhost:"+args[0]+"/Blockchain",my_BlockchainImpl) ;
+
+        	System.out.println("test "+ args[0] + " " + args[1] + " " + args[2] + " " + args[3]);
+
+            NoeudBlockImpl my_NoeudBlockImpl = new NoeudBlockImpl();
+            my_NoeudBlockImpl.MyPort = Integer.parseInt(args[0]);
+            Naming.rebind("rmi://127.0.0.1:"+args[0]+"/NoeudBlock", my_NoeudBlockImpl);
             System.out.println("\nSERVER Noeud_Block AT PORT "+args[0]+" LAUNCHED!!\n") ;
+
+
+
+            my_NoeudBlockImpl.my_BlockchainImpl = new BlockchainImpl(); //My blockchain is created
+            Naming.rebind("rmi://127.0.0.1:"+args[2]+"/Blockchain",my_NoeudBlockImpl.my_BlockchainImpl) ;
+            System.out.println("\nSERVER Block_Chain AT PORT "+args[2]+" LAUNCHED!!\n") ;
+
+            my_NoeudBlockImpl.my_BlockchainImpl = my_NoeudBlockImpl.my_BlockchainImpl.createNewBlock(waiting_transaction_list, 10);
         }
         catch (RemoteException re) { System.out.println(re); re.printStackTrace();}
         catch (MalformedURLException e) { System.out.println(e); e.printStackTrace();}
 
         ////////////////////on lance la pause////////////////////////
         try{
-          Thread.sleep(10000);
+          Thread.sleep(breakTime);
         }catch(InterruptedException v) { System.out.println(v); }
 
 
         ///////////////////on lance le client///////////////////////
         try{
+
+            NoeudBlock noeudBlock_Peer = (NoeudBlock)Naming.lookup("rmi://127.0.0.1:"+args[1]+"/NoeudBlock");
+           // my_NoeudBlockImpl.
+           // noeudBlock_Peer.port = Integer.parseInt(args[1]);
+            noeudBlock_Peer.connectToNoeudBlockNoeud(noeudBlock_Peer);
+            noeudBlock_Peer.afficheListNoeuds();
+            //noeudBlock_Peer.connectToNoeudBlockNoeud(noeudBlock_Peer);
+
+            //System.out.println()
+
             Blockchain blockchain_Peer =
-                                (Blockchain) Naming.lookup("rmi://localhost:"+args[1]+"/Blockchain");
+                                (Blockchain) Naming.lookup("rmi://127.0.0.1:"+args[3]+"/Blockchain");
             System.out.println(blockchain_Peer.printBlockchainImpl());
         }
         catch (NotBoundException re) { System.out.println(re) ; }
@@ -107,7 +135,7 @@ public class Noeud_Block{
 
         ////////////////////on lance la pause avant de quitter////////////////////////
         try{
-          Thread.sleep(5000);
+          Thread.sleep(breakTime);
         }catch(InterruptedException v) { System.out.println(v); }
     }
 }
