@@ -48,10 +48,10 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
         }
     }
 
-    public void afficheListNoeuds() throws RemoteException {
-        /*System.out.println("Mes voisins : ");
-        for(NoeudBlock n : neighbours) {
-            System.out.println(n.port + " ");
+    public void afficheNbVoisins() throws RemoteException {
+        System.out.println("J'ai " + neighbours.size() + " voisins.");
+     /*   for(NoeudBlock n : neighbours) {
+            System.out.println(n.port);
         }*/
     }
 

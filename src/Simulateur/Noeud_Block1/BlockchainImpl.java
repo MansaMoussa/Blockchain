@@ -192,4 +192,8 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
       return sendThis;
     }
 
+    public LinkedList<Block> sendBlockList() throws RemoteException{
+        return blocksList;
+    }
+
 }

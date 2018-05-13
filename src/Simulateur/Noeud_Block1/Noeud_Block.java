@@ -85,6 +85,7 @@ public class Noeud_Block{
 
 
     	//
+        NoeudBlockImpl my_NoeudBlockImpl;
         if (args.length != 4)
         {
             System.out.println("Usage : java Noeud_Block <port de mon serveur> <port de mon peer> <port de mon blockchain> <port de mon peer>") ;
@@ -96,9 +97,8 @@ public class Noeud_Block{
         ///////////////////on lance le serveur///////////////////////
         try{
 
-        	System.out.println("test "+ args[0] + " " + args[1] + " " + args[2] + " " + args[3]);
 
-            NoeudBlockImpl my_NoeudBlockImpl = new NoeudBlockImpl();
+            my_NoeudBlockImpl = new NoeudBlockImpl();
             my_NoeudBlockImpl.MyPort = Integer.parseInt(args[0]);
             Naming.rebind("rmi://127.0.0.1:"+args[0]+"/NoeudBlock", my_NoeudBlockImpl);
             System.out.println("\nSERVER Noeud_Block AT PORT "+args[0]+" LAUNCHED!!\n") ;
@@ -130,9 +130,9 @@ public class Noeud_Block{
 
             NoeudBlock noeudBlock_Peer = (NoeudBlock)Naming.lookup("rmi://127.0.0.1:"+args[1]+"/NoeudBlock");
            // my_NoeudBlockImpl.
-           // noeudBlock_Peer.port = Integer.parseInt(args[1]);
+        //   noeudBlock_Peer.port = Integer.parseInt(args[1]);
             noeudBlock_Peer.connectToNoeudBlockNoeud(noeudBlock_Peer);
-            noeudBlock_Peer.afficheListNoeuds();
+            noeudBlock_Peer.afficheNbVoisins();
             //noeudBlock_Peer.connectToNoeudBlockNoeud(noeudBlock_Peer);
 
             //System.out.println()
