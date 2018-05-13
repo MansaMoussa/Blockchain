@@ -6,15 +6,15 @@ import java.lang.StringBuilder;
 
 public class Noeud_Block{
  public static BigDecimal reward_for_bloc_creation;
-    public static Integer max_participant = 10;
+    //public static Integer max_participant = 10;
     //Liste voisins (leurs numeros de port)
-    public static LinkedList<Integer> neighbours;
+    //public static LinkedList<Integer> neighbours;
     //my blockchain that I share to others or update when others share theirs
-    public static BlockchainImpl my_BlockchainImpl;
+    //public static BlockchainImpl my_BlockchainImpl;
     //Ceux qui sont inscrits à moi
     //public LinkedList<Noeud_Participant> participants;
     //liste chaînée des opérations à transcrire
-    public static LinkedList<Transaction> waiting_transaction_list;
+    //public static LinkedList<Transaction> waiting_transaction_list;
 /*
     public BigDecimal getBlockMoney(){
         return this.reward_for_bloc_creation;
@@ -61,13 +61,14 @@ public class Noeud_Block{
 */
     //On va supprimer les opérations de la wainting_list déjà contenu dans le block
     //On va supprimer ceux qui ont déjà été validées (ceux qui sont déjà dans le lastBlock)
+    /*
     public void check_waitingListTransaction_vs_blockTransaction(Block lastBlock){
         for(Transaction wainting_transaction : waiting_transaction_list)
           for(Transaction block_transaction : lastBlock.getTransactionsList())
               if(wainting_transaction.equals(block_transaction))
                   waiting_transaction_list.remove(wainting_transaction);
     }
-
+    */
     ///////////////////////////////////////////////////////////////////
     ///////////////////C'est ici que ça se passe///////////////////////
     ///////////////////////////////////////////////////////////////////
@@ -91,7 +92,7 @@ public class Noeud_Block{
         }
 
         int breakTime = 10000;
-
+        LinkedList<Transaction> waiting_transaction_list = new LinkedList<Transaction>();
         ///////////////////on lance le serveur///////////////////////
         try{
 
@@ -106,13 +107,13 @@ public class Noeud_Block{
             Naming.rebind("rmi://127.0.0.1:"+args[2]+"/Blockchain",my_NoeudBlockImpl.my_BlockchainImpl) ;
             System.out.println("\nSERVER Block_Chain AT PORT "+args[2]+" LAUNCHED!!\n") ;
 
-            my_NoeudBlockImpl.my_BlockchainImpl = my_NoeudBlockImpl.my_BlockchainImpl.createNewBlock(waiting_transaction_list, 10, args[0]);
-            waiting_transaction_list = new LinkedList<>();
+            my_NoeudBlockImpl.my_BlockchainImpl = my_NoeudBlockImpl.my_BlockchainImpl.createNewBlock(my_NoeudBlockImpl.waiting_transaction_list, 10, args[0]);
+            waiting_transaction_list = my_NoeudBlockImpl.waiting_transaction_list;
             //Si la création est acceptée il faut que les participants reçoivent
             //de l'argent
             //On va accumuler l'argent dans le NoeudB si personne ne s'est
             //encore inscrit
-            my_BlockchainImpl = my_BlockchainImpl.createNewBlock(waiting_transaction_list, 10, args[0]);
+            my_NoeudBlockImpl.my_BlockchainImpl = my_NoeudBlockImpl.my_BlockchainImpl.createNewBlock(waiting_transaction_list, 10, args[0]);
 
         }
         catch (RemoteException re) { System.out.println(re); re.printStackTrace();}

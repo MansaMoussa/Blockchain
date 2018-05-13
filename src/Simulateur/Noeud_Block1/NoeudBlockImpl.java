@@ -9,19 +9,19 @@ import java.lang.StringBuilder;
 import java.math.BigDecimal;
 
 public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
-public static LinkedList<NoeudBlock> neighbours ;
-	public static LinkedList<Noeud_Participant> participants ;
-    
-    public static BigDecimal reward_for_bloc_creation;
-    public static Integer max_participant = 10;
+		public LinkedList<NoeudBlock> neighbours ;
+		public LinkedList<Noeud_Participant> participants ;
+
+    public BigDecimal reward_for_bloc_creation;
+    public Integer max_participant = 10;
     //Liste voisins (leurs numeros de port)
-    
+
     //my blockchain that I share to others or update when others share theirs
-    public static BlockchainImpl my_BlockchainImpl;
+    public BlockchainImpl my_BlockchainImpl;
     //Ceux qui sont inscrits à moi
 
     //liste chaînée des opérations à transcrire
-    public static LinkedList<Transaction> waiting_transaction_list;
+    public LinkedList<Transaction> waiting_transaction_list;
 
     public static int MyPort;
 
@@ -29,6 +29,7 @@ public static LinkedList<NoeudBlock> neighbours ;
       super();
       neighbours = new LinkedList<NoeudBlock>();
       participants = new LinkedList<Noeud_Participant>();
+			waiting_transaction_list = new LinkedList<Transaction>();
       //blocksList = new LinkedList<Block>();
     };
 
