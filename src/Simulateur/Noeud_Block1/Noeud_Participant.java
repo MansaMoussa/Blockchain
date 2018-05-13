@@ -1,6 +1,7 @@
 import java.rmi.*;
 import java.net.MalformedURLException;
 import java.math.BigDecimal;
+<<<<<<< HEAD
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Random;
@@ -9,6 +10,15 @@ import java.util.Random;
 public class Noeud_Participant implements Serializable{
     private BigDecimal earnings_for_work_done;
     public BigDecimal participantID;
+=======
+import java.math.BigInteger;
+import java.util.Random;
+
+public class Noeud_Participant{
+    private BigDecimal earnings_for_work_done;
+    private BigDecimal participantID;
+
+>>>>>>> 883795533f54e4ae7bf3fbadeda3f405783c5179
     public boolean proof_of_work_for_more_earnings(){
       boolean answer = false;
       try{
@@ -32,7 +42,11 @@ public class Noeud_Participant implements Serializable{
       return this.participantID;
     }
 
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 883795533f54e4ae7bf3fbadeda3f405783c5179
 
     ///////////////////////////////////////////////////////////////////
     ///////////////////C'est ici que ça se passe///////////////////////
@@ -40,6 +54,7 @@ public class Noeud_Participant implements Serializable{
 
     public static void main(String [] args)
     {
+<<<<<<< HEAD
       Noeud_Participant np = new Noeud_Participant();
 
       if (args.length != 2)
@@ -65,6 +80,15 @@ public class Noeud_Participant implements Serializable{
 
               noeudblock_Peer.connectToNoeudBlockParticipant(np);
               noeudblock_Peer.afficheListParticipants();
+=======
+      if (args.length != 1)
+          System.out.println("Usage : java Noeud_Participant <port du serveur à qui je veux demande des services>") ;
+      else{
+          try{
+              Blockchain blockchain_Peer =
+                                  (Blockchain) Naming.lookup("rmi://localhost:"+args[0]+"/Blockchain") ;
+              System.out.println(blockchain_Peer.printBlockchainImpl());
+>>>>>>> 883795533f54e4ae7bf3fbadeda3f405783c5179
 
           }
           catch (NotBoundException re) { System.out.println(re) ; }

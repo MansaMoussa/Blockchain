@@ -4,14 +4,12 @@ import java.net.InetAddress.* ;
 import java.net.* ;
 import java.util.LinkedList;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.lang.StringBuilder;
 import java.math.BigDecimal;
 import java.util.Random;
 
 public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
 
-    //liste chaînée des Block-s (qui ont max 10 kBytes?)
     public LinkedList<Block> blocksList;
 
     
@@ -28,47 +26,34 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
     //serverPort is the port number where this server is launched
     public StringBuilder printBlockchainImpl() throws RemoteException{
         StringBuilder display = new StringBuilder();
-        display.append("\n###########################################");
-        display.append("\n###########################################");
-        display.append("\n#**\tBLOCKCHAIN FROM Noeud_Block1\t**#");
-        display.append("\n#*****************************************#");
+        display.append("\n#####################################################");
+        display.append("\n#####################################################");
+        display.append("\n#**\tBLOCKCHAIN  FROM  Noeud_Block1");
+        display.append("\n#***************************************************#");
         for(Block b : blocksList)
             b.printBlock(display);
-        display.append("\n###########################################");
+        display.append("\n#####################################################");
 
         return display;
     }
 
-
-    /*
     public void printMyBlockchain() throws RemoteException{
+        BlockchainImpl b = new BlockchainImpl(blocksList);
+        System.out.println(b.printBlockchainImpl());
     }
-    */
 
     public Blockchain askBlockchain(BigDecimal profondeur) throws RemoteException{
         LinkedList<Block> tempBlockList = new LinkedList<Block>();
         BigDecimal i = new BigDecimal(0);
         for(  ; i.compareTo(profondeur) == -1 || i.compareTo(profondeur) == 0
               ; i.add(BigDecimal.ONE))
-            for(Block b : blocksList)
+            for(Block b : this.blocksList)
               if(i.compareTo(b.getHeight()) == 0)
                   tempBlockList.add(b);
         return new BlockchainImpl(tempBlockList);
     }
 
-    //To get the hash will put in the new block
-    private String hashBlock(Block b)
-    throws RemoteException{
-        // djb2 hash function
-        String blockString = b.blockSerialisation();
-        BigDecimal hash = new BigDecimal(7);
-        for(int i = 0; i < blockString.length(); i++)
-          hash = (hash.multiply(new BigDecimal(31))).add(new BigDecimal((int) blockString.charAt(i)));
-
-        return hash.toString();
-    }
-
-     //Here will try to create a new Block
+    //Here will try to create a new Block
     public BlockchainImpl createNewBlock(LinkedList<Transaction> transactionsList, int secondsToSleep)
     throws RemoteException{
         BlockchainImpl bc = new BlockchainImpl(this.blocksList);

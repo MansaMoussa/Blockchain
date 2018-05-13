@@ -67,6 +67,16 @@ public class Noeud_Block{
               if(wainting_transaction.equals(block_transaction))
                   waiting_transaction_list.remove(wainting_transaction);
     }
+<<<<<<< HEAD
+=======
+
+
+    ///////////////////////////////////////////////////////////////////
+    ///////////////////C'est ici que ça se passe///////////////////////
+    ///////////////////////////////////////////////////////////////////
+
+
+>>>>>>> 883795533f54e4ae7bf3fbadeda3f405783c5179
     public static void main(String [] args)
     {
 
@@ -95,6 +105,7 @@ public class Noeud_Block{
             my_NoeudBlockImpl.MyPort = Integer.parseInt(args[0]);
             Naming.rebind("rmi://127.0.0.1:"+args[0]+"/NoeudBlock", my_NoeudBlockImpl);
             System.out.println("\nSERVER Noeud_Block AT PORT "+args[0]+" LAUNCHED!!\n") ;
+<<<<<<< HEAD
 
 
 
@@ -103,6 +114,14 @@ public class Noeud_Block{
             System.out.println("\nSERVER Block_Chain AT PORT "+args[2]+" LAUNCHED!!\n") ;
 
             my_NoeudBlockImpl.my_BlockchainImpl = my_NoeudBlockImpl.my_BlockchainImpl.createNewBlock(waiting_transaction_list, 10);
+=======
+            waiting_transaction_list = new LinkedList<>();
+            //Si la création est acceptée il faut que les participants reçoivent
+            //de l'argent
+            //On va accumuler l'argent dans le NoeudB si personne ne s'est
+            //encore inscrit
+            my_BlockchainImpl = my_BlockchainImpl.createNewBlock(waiting_transaction_list, 10);
+>>>>>>> 883795533f54e4ae7bf3fbadeda3f405783c5179
         }
         catch (RemoteException re) { System.out.println(re); re.printStackTrace();}
         catch (MalformedURLException e) { System.out.println(e); e.printStackTrace();}
