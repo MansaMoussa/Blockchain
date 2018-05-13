@@ -1,7 +1,6 @@
 import java.rmi.*;
 import java.net.MalformedURLException;
 import java.math.BigDecimal;
-<<<<<<< HEAD
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Random;
@@ -10,15 +9,7 @@ import java.util.Random;
 public class Noeud_Participant implements Serializable{
     private BigDecimal earnings_for_work_done;
     public BigDecimal participantID;
-=======
-import java.math.BigInteger;
-import java.util.Random;
 
-public class Noeud_Participant{
-    private BigDecimal earnings_for_work_done;
-    private BigDecimal participantID;
-
->>>>>>> 883795533f54e4ae7bf3fbadeda3f405783c5179
     public boolean proof_of_work_for_more_earnings(){
       boolean answer = false;
       try{
@@ -42,11 +33,6 @@ public class Noeud_Participant{
       return this.participantID;
     }
 
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 883795533f54e4ae7bf3fbadeda3f405783c5179
 
     ///////////////////////////////////////////////////////////////////
     ///////////////////C'est ici que ça se passe///////////////////////
@@ -54,7 +40,6 @@ public class Noeud_Participant{
 
     public static void main(String [] args)
     {
-<<<<<<< HEAD
       Noeud_Participant np = new Noeud_Participant();
 
       if (args.length != 2)
@@ -63,37 +48,41 @@ public class Noeud_Participant{
           try{
 
                 np.participantID = new BigDecimal(args[1]);
-              int attenteRandom = 10000 + (int)(Math.random() * ((70000 - 10000) + 1));
-              System.out.println(attenteRandom);
-               try{
-                    System.out.println("Bonjour je suis le Noeud Participant " + args[1] + ". Je souhaite me connecter au Noeud Block " + args[0]);
-                    Thread.sleep(1000);
-              }
-              catch(InterruptedException v) { System.out.println(v); }
+                int attenteRandom = 10000 + (int)(Math.random() * ((70000 - 10000) + 1));
+                System.out.println(attenteRandom);
+                 try{
+                      System.out.println("Bonjour je suis le Noeud Participant " + args[1] + ". Je souhaite me connecter au Noeud Block " + args[0]);
+                      Thread.sleep(1000);
+                }
+                catch(InterruptedException v) { System.out.println(v); }
 
 
-              NoeudBlock noeudblock_Peer =
-                                  (NoeudBlock) Naming.lookup("rmi://127.0.0.1:"+args[0]+"/NoeudBlock") ;
+                NoeudBlock noeudblock_Peer =
+                                    (NoeudBlock) Naming.lookup("rmi://127.0.0.1:"+args[0]+"/NoeudBlock") ;
 
-              System.out.println("Bonjour je suis le Noeud Participant " + args[1] + ". Je suis connecté au Noeud Block " + args[0]);
-              //System.out.println(blockchain_Peer.printBlockchainImpl());
+                System.out.println("Bonjour je suis le Noeud Participant " + args[1] + ". Je suis connecté au Noeud Block " + args[0]);
+                //System.out.println(blockchain_Peer.printBlockchainImpl());
 
-              noeudblock_Peer.connectToNoeudBlockParticipant(np);
-              noeudblock_Peer.afficheListParticipants();
-=======
-      if (args.length != 1)
-          System.out.println("Usage : java Noeud_Participant <port du serveur à qui je veux demande des services>") ;
-      else{
-          try{
-              Blockchain blockchain_Peer =
-                                  (Blockchain) Naming.lookup("rmi://localhost:"+args[0]+"/Blockchain") ;
-              System.out.println(blockchain_Peer.printBlockchainImpl());
->>>>>>> 883795533f54e4ae7bf3fbadeda3f405783c5179
+                noeudblock_Peer.connectToNoeudBlockParticipant(np);
+                noeudblock_Peer.afficheListParticipants();
+            }
+            catch (NotBoundException re) { System.out.println(re) ; }
+            catch (RemoteException re) { System.out.println(re) ; }
+            catch (MalformedURLException e) { System.out.println(e) ; }
+            if (args.length != 1)
+                System.out.println("Usage : java Noeud_Participant <port du serveur à qui je veux demande des services>") ;
+            else{
 
-          }
-          catch (NotBoundException re) { System.out.println(re) ; }
-          catch (RemoteException re) { System.out.println(re) ; }
-          catch (MalformedURLException e) { System.out.println(e) ; }
-      }
+                try{
+                    Blockchain blockchain_Peer =
+                                        (Blockchain) Naming.lookup("rmi://localhost:"+args[0]+"/Blockchain") ;
+                    System.out.println(blockchain_Peer.printBlockchainImpl());
+
+                }
+                catch (NotBoundException re) { System.out.println(re) ; }
+                catch (RemoteException re) { System.out.println(re) ; }
+                catch (MalformedURLException e) { System.out.println(e) ; }
+            }
+       }
     }
 }

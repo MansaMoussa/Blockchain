@@ -148,6 +148,18 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
         return primeNumber_found;
     }
 
+    //To get the hash will put in the new block
+    private String hashBlock(Block b)
+    throws RemoteException{
+        // djb2 hash function
+        String blockString = b.blockSerialisation();
+        BigDecimal hash = new BigDecimal(7);
+        for(int i = 0; i < blockString.length(); i++)
+          hash = (hash.multiply(new BigDecimal(31))).add(new BigDecimal((int) blockString.charAt(i)));
+
+        return hash.toString();
+    }
+
     //His money is the sum of all he got minus all he'd sent
     private BigDecimal howMuchMoneyDoesAParticipantHas(Noeud_Participant nP){
       BigDecimal moneyReceived = new BigDecimal(0);
