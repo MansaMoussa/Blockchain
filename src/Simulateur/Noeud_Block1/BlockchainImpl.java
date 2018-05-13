@@ -120,7 +120,7 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
         Block tmpBlock = b;
         tmpBlock.setNonce(nonce);
         String tmpHash = hashBlock(tmpBlock);
-        System.out.println(tmpHash);
+        System.out.println("** I'm doing the proof of work **");
         for(int i = 5; i > 2 && !primeNumber_found ; i--){
           int testSubstring = 0; //Dans le cas où on catch une erreur
           try{
