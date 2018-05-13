@@ -64,7 +64,11 @@ public class Block{
 
     //Retourne le nombre de transactions
     public BigDecimal getTransactionsNumber(){
-        return new BigDecimal(transactionsList.size());
+        BigDecimal answer = BigDecimal.ZERO;
+        if(transactionsList != null)
+          answer = new BigDecimal(transactionsList.size());
+
+        return answer;
     }
 
     //On donne une valeur au nonce
