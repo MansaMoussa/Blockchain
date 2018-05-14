@@ -57,7 +57,7 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
     }
 
     //Here will try to create a new Block
-    public BlockchainImpl createNewBlock(LinkedList<Transaction> transactionsList, int secondsToSleep, String myPort)
+    public BlockchainImpl createNewBlock(LinkedList<Transaction> waiting_T_List, int secondsToSleep, String myPort)
     throws RemoteException{
         BlockchainImpl bc = new BlockchainImpl(this.blocksList);
         BigDecimal prof = BigDecimal.ZERO;//
@@ -76,7 +76,6 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
         }
 
 
-        //Block b = new Block(prof, hashPreviousBlock, creatorName, transactionsList);
         Block b = new Block(prof, hashPreviousBlock, creatorName, new LinkedList<Transaction>());
 
         BigDecimal try_nonce = new BigDecimal(Math.random());
@@ -110,6 +109,9 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
             //Il faut donner de la thune aux participants
             bc = new BlockchainImpl(this.blocksList);
         }
+
+        bc.write_transactionToBlock(waiting_T_List);
+
         //Il va falloir l'envoyer aux Noeud_Block voisins afin qu'ils n'encréent
         //pas à la même profondeur
         return bc;
@@ -240,6 +242,35 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
       }
 
       return sendThis;
+    }
+
+    //On va supprimer les opérations de la wainting_list déjà contenu dans le block
+    //On va supprimer ceux qui ont déjà été validées (ceux qui sont déjà dans le lastBlock)
+    public void check_waitingListTransaction_vs_blockTransaction(LinkedList<Transaction> wt_list)
+    throws RemoteException{
+        for(Transaction block_transaction : getLastBlock().getTransactionsList())
+            for(Transaction wainting_transaction : wt_list)
+              if(wainting_transaction.equals(block_transaction))
+                  wt_list.remove(wainting_transaction);
+
+        for(Transaction wainting_transaction : wt_list)
+            for(Transaction block_transaction : getLastBlock().getTransactionsList())
+              if(wainting_transaction.equals(block_transaction))
+                  wt_list.remove(wainting_transaction);
+    }
+
+    public void write_transactionToBlock(LinkedList<Transaction> waiting_T_List)
+    throws RemoteException{
+
+      for(Transaction t : waiting_T_List){
+        //Cette condition ne vaut que lorsqu'un échange
+        //de monnaie bloc est solicitée
+        if(t.getType() == 'E' && t.valid_transaction(new BlockchainImpl(this.blocksList)))
+            getLastBlock().addTransaction(t);
+        else if((t.getType() == 'C')||(t.getType() == 'I'))
+            getLastBlock().addTransaction(t);
+      }
+
     }
 
 }
