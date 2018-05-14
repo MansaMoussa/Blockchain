@@ -12,24 +12,10 @@ public class Noeud_Block{
         //On doit lui dire qu'il crée un block dans sa liste d'attente(?)
     }
 
-
-    //Je demande à voisin
-    public void send_part_of_BlockchainImpl(int from_hauteur, Noeud_Block voisin){
-        //Chaque noeud block peut demander tout ou une partie
-        //de la BlockchainImpl
-    }
-
-    public void check_BlockchainImpl_exist(BlockchainImpl b, int hauteur){
-        //Valide sera la première reçu
-    }
-
     public void check_blochain_no_corruption(BlockchainImpl b){
         //Ici on pourrait simplement vérifier si chaque hash_précedent est
         //vraiment le vrai (en recalculant le trucZer)
     }
-
-    //On ne peut pas chiffrer les opérations/transactions des noeuds participants
-    // Sinon on ne saurait pas vérifier si des transactions sont vraies ou pas
 
 */
 
@@ -37,17 +23,7 @@ public class Noeud_Block{
     ///////////////////C'est ici que ça se passe///////////////////////
     ///////////////////////////////////////////////////////////////////
 
-
     public static void main(String [] args){
-
-
-    	//
-
-
-    	// AJOUTER LISTE GLOBALE AVEC PORTS DES NOEUDS BLOCS ET CONNEXION RANDOM D'UN PARTICIPANT AUX NOEUDS
-
-
-    	//
         if (args.length != 4)
         {
             System.out.println("Usage : java Noeud_Block <port de mon serveur> <port de mon peer> <port de mon blockchain> <port de mon peer>") ;
@@ -79,15 +55,6 @@ public class Noeud_Block{
             Naming.rebind("rmi://127.0.0.1:"+args[2]+"/Blockchain",my_NoeudBlockImpl.my_BlockchainImpl) ;
             System.out.println("\nSERVER Block_Chain AT PORT "+args[2]+" LAUNCHED!!\n") ;
 
-
-
-            //Si la création est acceptée il faut que les participants reçoivent
-            //de l'argent
-            //On va accumuler l'argent dans le NoeudB si personne ne s'est
-            //encore inscrit
-            //my_NoeudBlockImpl.my_BlockchainImpl = my_NoeudBlockImpl.my_BlockchainImpl.createNewBlock(waiting_transaction_list, 10, args[0]);
-
-            //Print my blockchain
             my_NoeudBlockImpl.my_BlockchainImpl.printMyBlockchain(args[0]);
 
         }
@@ -119,22 +86,17 @@ public class Noeud_Block{
 
               //my_NoeudBlockImpl.check_waitingListTransaction_vs_blockTransaction(my_NoeudBlockImpl.my_BlockchainImpl.sendBlockList().getLast());
               System.out.println("\nmy Heiiight "+my_NoeudBlockImpl.my_BlockchainImpl.getHeight());
-              System.out.println("\nHis Heiiight "+blockchain_Peer.getHeight()+"\n\n");
+              System.out.println("\nHis Heiiight "+blockchain_Peer.getHeight()+"\n");
               if(blockchain_Peer.getHeight().compareTo(my_NoeudBlockImpl.my_BlockchainImpl.getHeight())==0){
                     System.out.println("\nmy Time "+my_NoeudBlockImpl.my_BlockchainImpl.sendBlockList().getLast().getTimeStamp());
-                    System.out.println("\nHis Time "+blockchain_Peer.sendBlockList().getLast().getTimeStamp()+"\n\n");
+                    System.out.println("\nHis Time "+blockchain_Peer.sendBlockList().getLast().getTimeStamp()+"\n");
                     //Dans ce cas on prends celui qui existe depuis longtemps
                     if(blockchain_Peer.sendBlockList().getLast().getTimeStamp().compareTo(my_NoeudBlockImpl.my_BlockchainImpl.sendBlockList().getLast().getTimeStamp())==-1){
-                       //my_NoeudBlockImpl.my_BlockchainImpl.delete_creation_transac_try(my_NoeudBlockImpl.waiting_transaction_list, args[0]);
                        my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(blockchain_Peer.sendBlockList(), my_NoeudBlockImpl.my_BlockchainImpl.getHeight());
-                       //my_NoeudBlockImpl.my_BlockchainImpl.blocksList = blockchain_Peer.sendBlockList();
                        System.out.println("\n I N S I D E  v1\n");
                     }
               }
               else if(blockchain_Peer.getHeight().compareTo(my_NoeudBlockImpl.my_BlockchainImpl.getHeight())==1){
-                    //Comme ça je nettoie bien la waiting_transaction_list
-                    //my_NoeudBlockImpl.my_BlockchainImpl.delete_creation_transac_try(my_NoeudBlockImpl.waiting_transaction_list, args[0]);
-                    //my_NoeudBlockImpl.my_BlockchainImpl.blocksList = blockchain_Peer.sendBlockList();
                     my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(blockchain_Peer.sendBlockList());
                     System.out.println("\n I N S I D E  v2\n");
               }
@@ -142,13 +104,17 @@ public class Noeud_Block{
               try{
                 Random random = new Random();
                 waitAlea = random.nextInt(max+1-min) + min;
-                System.out.println("\nHHHHHHH "+blockchain_Peer.getHeight()+"\n");
                 my_NoeudBlockImpl.my_BlockchainImpl.printMyBlockchain(args[0]);
                 Thread.sleep(intArray.get(waitAlea));
               }catch(InterruptedException v) { System.out.println(v); }
 
               //On supprime les opérations en attente déjà dans le dernier block
               my_NoeudBlockImpl.my_BlockchainImpl.check_waitingListTransaction_vs_blockTransaction(my_NoeudBlockImpl.waiting_transaction_list);
+              if(my_NoeudBlockImpl.my_BlockchainImpl.getLastBlock().getCreator().equals("Noeud_Block "+my_NoeudBlockImpl.MyPort)){
+                my_NoeudBlockImpl.addONEZer();
+                System.out.println("\nWe have now "+my_NoeudBlockImpl.getBlockMoney()+" Zer :)\n");
+              }
+
             }
         }
         catch (NotBoundException re) { System.out.println(re) ; }

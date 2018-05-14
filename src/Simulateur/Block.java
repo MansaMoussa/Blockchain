@@ -54,6 +54,10 @@ public class Block implements Serializable{
         return display;
     }
 
+    public String getCreator(){
+      return this.creator;
+    }
+
     //Retourne la liste de transactions de ce Block
     public LinkedList<Transaction> getTransactionsList(){
         return this.transactionsList;

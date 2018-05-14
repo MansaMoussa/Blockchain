@@ -10,18 +10,15 @@ import java.math.BigDecimal;
 
 public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
 		public LinkedList<NoeudBlock> neighbours ;
+		//Ceux qui sont inscrits à moi
 		public LinkedList<Noeud_Participant> participants ;
-    public BigDecimal reward_for_bloc_creation;
+    private BigDecimal reward_for_bloc_creation;
     public Integer max_participant = 10;
-    //Liste voisins (leurs numeros de port)
-
     //my blockchain that I share to others or update when others share theirs
     public BlockchainImpl my_BlockchainImpl;
-    //Ceux qui sont inscrits à moi
-
     //liste chaînée des opérations à transcrire
     public LinkedList<Transaction> waiting_transaction_list;
-
+		//My port number
     public static int MyPort;
 
     public NoeudBlockImpl() throws RemoteException{
@@ -29,12 +26,13 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
       neighbours = new LinkedList<NoeudBlock>();
       participants = new LinkedList<Noeud_Participant>();
 			waiting_transaction_list = new LinkedList<Transaction>();
+			reward_for_bloc_creation = new BigDecimal(2);
       //blocksList = new LinkedList<Block>();
     };
 
     public void connectToNoeudBlockParticipant(Noeud_Participant np) throws RemoteException {
 
-				if(participants.size()<=10){ //Tant qu'on a pas atteint le nombre max de participant
+				if(participants.size()<=max_participant){ //Tant qu'on a pas atteint le nombre max de participant
 					Transaction t = new Transaction('I', np.participantID+" to Noeud_Block "+MyPort);
 					write_transactionTowaitingList(t);
 	        participants.add(np);
@@ -62,6 +60,10 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
 
 		public BigDecimal getBlockMoney() throws RemoteException{
 				return this.reward_for_bloc_creation;
+		}
+
+		public void addONEZer() throws RemoteException{
+				this.reward_for_bloc_creation.add(new BigDecimal(1));
 		}
 
 
