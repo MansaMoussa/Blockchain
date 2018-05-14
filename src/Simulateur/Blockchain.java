@@ -3,7 +3,9 @@ import java.rmi.RemoteException ;
 import java.math.BigDecimal;
 import java.lang.StringBuilder;
 import java.util.LinkedList;
+
 import java.io.Serializable;
+
 
 public interface Blockchain extends Remote, Serializable{
     //Print a blockchain from a neighbour

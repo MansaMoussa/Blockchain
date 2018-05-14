@@ -58,6 +58,11 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
         }*/
     }
 
+    public void afficheNbVoisins() throws RemoteException {
+        System.out.println("J'ai " + neighbours.size() + " voisins.");
+
+    }
+
 		public int getBlockMoney() throws RemoteException{
 				return this.reward_for_bloc_creation;
 		}
