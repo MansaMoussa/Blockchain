@@ -1,8 +1,9 @@
 import java.util.LinkedList;
 import java.math.BigDecimal;
 import java.lang.StringBuilder;
+import java.io.Serializable;
 
-public class Block{
+public class Block implements Serializable{
     //A quel profondeur de la blockchain se situe ce block
     private BigDecimal profondeur;
     //Hash du block précedent
@@ -13,6 +14,8 @@ public class Block{
     private String creator;
     //Le nombre qu'on va essayer de modifier jusqu'à trouver un bon hash
     private BigDecimal nonce;
+    //Curent time
+    private BigDecimal timeStamp;
     //List of Transactions that are inside of the block
     private BigDecimal transactionsNumber;
     //List of Transactions that are inside of the block
@@ -25,6 +28,7 @@ public class Block{
         this.creator = creatorName;
         this.transactionsList = transactionsList;
         this.transactionsNumber = getTransactionsNumber();
+        this.timeStamp = new BigDecimal(System.currentTimeMillis());
     }
 
 
@@ -35,13 +39,15 @@ public class Block{
         display.append("\n#---------------------------------------------------#");
         display.append("\n#--\t\tCreator  :  "+this.creator);
         display.append("\n#---------------------------------------------------#");
-        display.append("\n#-- HashPreviousBlock : "+this.hashPreviousBlock);
+        display.append("\n#-- HashPreviousBlock : "+new BigDecimal(this.hashPreviousBlock).remainder(new BigDecimal("100000000000000000000000000000000000000000")));
         display.append("\n#---------------------------------------------------#");
-        display.append("\n#-- Hash : "+this.myHash);
+        display.append("\n#-- Hash : "+new BigDecimal(this.myHash).remainder(new BigDecimal("100000000000000000000000000000000000000000")));
+        display.append("\n#---------------------------------------------------#");
+        display.append("\n#-- TimeStamp : "+this.timeStamp);
         display.append("\n#---------------------------------------------------#");
         display.append("\n#-- Nonce : "+this.nonce);
         display.append("\n#---------------------------------------------------#");
-        for(Transaction t : transactionsList)
+        for(Transaction t : this.transactionsList)
             t.printTransaction(display);
         display.append("\n#***************************************************#");
 
@@ -54,12 +60,17 @@ public class Block{
     }
 
     public void addTransaction(Transaction t){
-      transactionsList.addFirst(t);
+      transactionsList.addLast(t);
     }
 
     //Retourne la profondeur du Block
     public BigDecimal getHeight(){
         return this.profondeur;
+    }
+
+    //Retourne le timeStamp
+    public BigDecimal getTimeStamp(){
+      return this.timeStamp;
     }
 
     //Retourne le nombre de transactions
@@ -81,6 +92,11 @@ public class Block{
         this.myHash = hash;
     }
 
+    //Je renvoie mon hash
+    public String getMyHash(){
+        return this.myHash;
+    }
+
     public String blockSerialisation(){
         String transactionsString = new String();
 
@@ -88,7 +104,7 @@ public class Block{
             transactionsString = transactionsString + "~"
                                                 + t.transactionSerialisation();
 
-        return "~"+profondeur+"~"+hashPreviousBlock+"~"+nonce+"~"+
+        return "~"+profondeur+"~"+hashPreviousBlock+"~"+nonce+"~"+timeStamp+"~"+
                  creator+"~"+getTransactionsNumber()+"~"+transactionsString+"~";
     }
 

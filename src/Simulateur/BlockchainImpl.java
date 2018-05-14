@@ -13,6 +13,9 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
     public LinkedList<Block> blocksList;
 
 
+    public BigDecimal getHeight() throws RemoteException{
+        return new BigDecimal(this.blocksList.size()).subtract(BigDecimal.ONE);
+    }
 
     public BlockchainImpl() throws RemoteException{
       super();
@@ -30,7 +33,7 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
         display.append("\n#####################################################");
         display.append("\n#**\tBLOCKCHAIN  FROM  Noeud_Block "+myPort);
         display.append("\n#***************************************************#");
-        for(Block b : blocksList)
+        for(Block b : this.blocksList)
             b.printBlock(display);
         display.append("\n#####################################################");
 
@@ -64,8 +67,8 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
         int i = 0;
         //Vu qu'il doit être dans au moins un des 2 cas en bas
         if(!this.blocksList.isEmpty()){
-          hashPreviousBlock = hashBlock(getLastBlock());
-          prof = getLastBlock().getHeight();
+          hashPreviousBlock = getLastBlock().getMyHash();
+          prof = getLastBlock().getHeight().add(BigDecimal.ONE);
         }
         else{//La blockchain vient de commencer, donc avant 0 y a pas de bloc
           i = secondsToSleep; //Comme ça on sort directement de la boucle
@@ -73,7 +76,8 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
         }
 
 
-        Block b = new Block(prof, hashPreviousBlock, creatorName, transactionsList);
+        //Block b = new Block(prof, hashPreviousBlock, creatorName, transactionsList);
+        Block b = new Block(prof, hashPreviousBlock, creatorName, new LinkedList<Transaction>());
 
         BigDecimal try_nonce = new BigDecimal(Math.random());
 
@@ -103,11 +107,24 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
                     new Transaction('C', creatorName+" creates Block "+prof);
             b.addTransaction(creationTransaction);
             this.blocksList.addLast(b);
+            //Il faut donner de la thune aux participants
             bc = new BlockchainImpl(this.blocksList);
         }
         //Il va falloir l'envoyer aux Noeud_Block voisins afin qu'ils n'encréent
         //pas à la même profondeur
         return bc;
+    }
+
+    public void delete_creation_transac_try(LinkedList<Transaction> transactionsList, String myPort)
+    throws RemoteException{
+        // BigDecimal prof = getLastBlock().getHeight();
+        // Transaction creationTransaction =
+        //       new Transaction('C', "Noeud_Block "+myPort+" creates Block "+prof);
+        //
+        // for(Transaction t : transactionsList)
+        //     if(t.equals(creationTransaction))
+      	// 					transactionsList.remove(creationTransaction);
+        transactionsList.removeLast();
     }
 
     //On vérifie si ce nonce donné en paramètre permet d'obtenir un nombre
@@ -120,7 +137,7 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
         Block tmpBlock = b;
         tmpBlock.setNonce(nonce);
         String tmpHash = hashBlock(tmpBlock);
-        System.out.println("** I'm doing the proof of work **");
+        //System.out.println("ı");//I'm doing the proof of work
         for(int i = 5; i > 2 && !primeNumber_found ; i--){
           int testSubstring = 0; //Dans le cas où on catch une erreur
           try{
@@ -131,8 +148,24 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
         return primeNumber_found;
     }
 
+    public void setBlockList(LinkedList<Block> bc, BigDecimal height) throws RemoteException{
+        int prof = height.intValueExact();
+        this.blocksList.remove(prof);
+        this.blocksList.add(prof, bc.get(prof));
+    }
+
+    public void setBlockList(LinkedList<Block> bc) throws RemoteException{
+          this.blocksList = bc;
+    }
+
+
+
+    public LinkedList<Block> sendBlockList() throws RemoteException{
+        return blocksList;
+    }
+
     //Return the last block  added on the Blockchain
-    private Block getLastBlock()
+    public Block getLastBlock()
     throws RemoteException{
         return this.blocksList.getLast();
     }
@@ -178,14 +211,31 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
       return moneyReceived.subtract(moneySent);
     }
 
+
+    public BigDecimal howMuchMoneyDoesAParticipantHas(BigDecimal participantID){
+      BigDecimal moneyReceived = new BigDecimal(0);
+      BigDecimal moneySent = new BigDecimal(0);
+
+      for(Block b : blocksList)
+        for(Transaction t : b.getTransactionsList())
+          moneyReceived = moneyReceived.add(t.moneyReceivedOf(participantID));
+
+
+      for(Block b : blocksList)
+        for(Transaction t : b.getTransactionsList())
+          moneySent = moneySent.add(t.moneySentOf(participantID));
+
+
+      return moneyReceived.subtract(moneySent);
+    }
+
     private BigDecimal sendMoneyFromTo(Noeud_Participant nP1, Noeud_Participant nP2, BigDecimal moneySent){
       BigDecimal nP1Money = howMuchMoneyDoesAParticipantHas(nP1);
       BigDecimal sendThis = BigDecimal.ZERO;
 
        //nP1Money>=moneySent
       if(nP1Money.compareTo(moneySent) == 1 || nP1Money.compareTo(moneySent) == 0){
-          //Transaction t = new Transaction('E', nP1.participantID+" to "+nP2.participantID+" "+moneySent);
-          //waiting_transaction_list.addLast(t);
+          Transaction t = new Transaction('E', nP1.participantID+" to "+nP2.participantID+" "+moneySent);
           sendThis = moneySent;
       }
 

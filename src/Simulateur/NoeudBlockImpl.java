@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
 		public LinkedList<NoeudBlock> neighbours ;
 		public LinkedList<Noeud_Participant> participants ;
-
     public BigDecimal reward_for_bloc_creation;
     public Integer max_participant = 10;
     //Liste voisins (leurs numeros de port)
@@ -50,9 +49,35 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
 
     public void afficheNbVoisins() throws RemoteException {
         System.out.println("J'ai " + neighbours.size() + " voisins.");
-     /*   for(NoeudBlock n : neighbours) {
-            System.out.println(n.port);
-        }*/
+
     }
 
+		public BigDecimal getBlockMoney() throws RemoteException{
+				return this.reward_for_bloc_creation;
+		}
+
+		//On va supprimer les opérations de la wainting_list déjà contenu dans le block
+    //On va supprimer ceux qui ont déjà été validées (ceux qui sont déjà dans le lastBlock)
+    public void check_waitingListTransaction_vs_blockTransaction() throws RemoteException{
+
+				for(Transaction block_transaction : this.my_BlockchainImpl.getLastBlock().getTransactionsList())
+        		for(Transaction wainting_transaction : this.waiting_transaction_list)
+              if(wainting_transaction.equals(block_transaction))
+                  waiting_transaction_list.remove(wainting_transaction);
+
+				for(Transaction wainting_transaction : this.waiting_transaction_list)
+						for(Transaction block_transaction : this.my_BlockchainImpl.getLastBlock().getTransactionsList())
+							if(wainting_transaction.equals(block_transaction))
+									waiting_transaction_list.remove(wainting_transaction);
+    }
+
+		//We won't write anything if the transaction is not valid
+		public void write_transaction(Transaction t) throws RemoteException{
+				//Cette condition ne vaut que lorsqu'un échange
+				//de monnaie bloc est solicitée
+				if(t.getType() == 'E' && t.valid_transaction(my_BlockchainImpl))
+						waiting_transaction_list.addLast(t);
+				else if((t.getType() == 'C')||(t.getType() == 'I'))
+						waiting_transaction_list.addLast(t);
+		}
 }

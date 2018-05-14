@@ -1,8 +1,14 @@
 import java.math.BigDecimal;
 import java.lang.StringBuilder;
 import java.util.StringTokenizer;
+import java.io.Serializable;
 
-public class Transaction{
+public class Transaction implements Serializable{
+    //Transaction form
+    //new Transaction('E', nP1.participantID+" to "+nP2.participantID+" "+moneySent);
+    //new Transaction('C', noeudBlock+" creation "+nP1.participantID+" "+moneySent);
+    //new Transaction('C', noeudBlock+" creates "+Block+" "+deep);
+    //new Transaction('I', nP1.participantID+" to "+noeudBlock);
     private char type;
     private String data; //Différentes selon le type de données qu'on a
 
@@ -76,4 +82,31 @@ public class Transaction{
     public String transactionSerialisation(){
         return this.type+"~"+this.data+"~";
     }
+
+    //Remetre les transactions du bloc non valid dans la liste d'attente
+		public boolean valid_transaction(BlockchainImpl bc){
+				//Possède t-il ce qu'il veut dépenser?
+				//Vérifions ça dans la BlockchainImpl
+				boolean answer= true;
+				BigDecimal moneyHeGot; //=
+				if(this.getType() == 'E'){
+					StringTokenizer st = new StringTokenizer(this.getData(), " ");
+	        int i = 0;
+	        while (st.hasMoreTokens()) {
+	          String dataContent = st.nextToken(); //
+	          //Because we know that iD is the second element
+	          if(i == 0) //dataContent = the sender
+	          {
+							moneyHeGot = bc.howMuchMoneyDoesAParticipantHas(new BigDecimal(dataContent));
+	            st.nextToken();// = to
+	            st.nextToken();// = the who had received money ; We suppose that he'll always exist
+	            //Because we know that the money value is the third element
+							if(moneyHeGot.compareTo(new BigDecimal(st.nextToken())) == -1)
+									answer = false;
+	          }
+	          i++;
+	        }
+				}
+				return answer;
+		}
 }
