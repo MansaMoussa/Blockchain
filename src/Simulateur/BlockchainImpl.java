@@ -57,7 +57,7 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
     }
 
     //Here will try to create a new Block
-    public BlockchainImpl createNewBlock(LinkedList<Transaction> waiting_T_List, int secondsToSleep, String myPort)
+    public BlockchainImpl createNewBlock(LinkedList<Transaction> waiting_T_List, LinkedList<Noeud_Participant> participants, int secondsToSleep, String myPort)
     throws RemoteException{
         BlockchainImpl bc = new BlockchainImpl(this.blocksList);
         int prof = 0;//
@@ -105,7 +105,8 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
             Transaction creationTransaction =
                     new Transaction('C', creatorName+" creates Block "+prof);
             b.addTransaction(creationTransaction);
-            this.blocksList.addLast(b);
+            this.blocksList.add(b);
+            creationMoneyTransaction(b, participants, myPort);
             //Il faut donner de la thune aux participants
             bc = new BlockchainImpl(this.blocksList);
         }
@@ -270,6 +271,16 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
             getLastBlock().addTransaction(t);
       }
 
+    }
+
+    public void creationMoneyTransaction(Block b, LinkedList<Noeud_Participant> participants, String myPort)
+    throws RemoteException{
+      int pNumber = participants.size();
+      for(Noeud_Participant p : participants){
+        BigDecimal money = new BigDecimal((1*p.merit)/pNumber);
+        Transaction t = new Transaction('C', "Noeud_Block "+myPort+" creation "+p.participantID+" "+money);
+        b.addTransaction(t);
+      }
     }
 
 }

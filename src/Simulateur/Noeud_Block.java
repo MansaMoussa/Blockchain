@@ -82,7 +82,7 @@ public class Noeud_Block{
 
             while(true){
               my_NoeudBlockImpl.my_BlockchainImpl =
-                  my_NoeudBlockImpl.my_BlockchainImpl.createNewBlock(my_NoeudBlockImpl.waiting_transaction_list, 10, args[0]);
+                  my_NoeudBlockImpl.my_BlockchainImpl.createNewBlock(my_NoeudBlockImpl.waiting_transaction_list, my_NoeudBlockImpl.participants, 10, args[0]);
 
               //my_NoeudBlockImpl.check_waitingListTransaction_vs_blockTransaction(my_NoeudBlockImpl.my_BlockchainImpl.sendBlockList().getLast());
               System.out.println("\nmy Heiiight "+my_NoeudBlockImpl.my_BlockchainImpl.getHeight());
@@ -91,7 +91,7 @@ public class Noeud_Block{
                     System.out.println("\nmy Time "+my_NoeudBlockImpl.my_BlockchainImpl.sendBlockList().getLast().getTimeStamp());
                     System.out.println("\nHis Time "+blockchain_Peer.sendBlockList().getLast().getTimeStamp()+"\n");
                     //Dans ce cas on prends celui qui existe depuis longtemps
-                    if(blockchain_Peer.sendBlockList().getLast().getTimeStamp().compareTo(my_NoeudBlockImpl.my_BlockchainImpl.sendBlockList().getLast().getTimeStamp())==-1){
+                    if(blockchain_Peer.sendBlockList().getLast().getTimeStamp().compareTo(my_NoeudBlockImpl.my_BlockchainImpl.sendBlockList().getLast().getTimeStamp())!=1){
                        my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(blockchain_Peer.sendBlockList(), my_NoeudBlockImpl.my_BlockchainImpl.getHeight());
                        System.out.println("\n I N S I D E  v1\n");
                     }

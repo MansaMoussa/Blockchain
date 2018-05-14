@@ -6,8 +6,8 @@ import java.io.Serializable;
 public class Transaction implements Serializable{
     //Transaction form
     //new Transaction('E', nP1.participantID+" to "+nP2.participantID+" "+moneySent);
-    //new Transaction('C', noeudBlock+" creation "+nP1.participantID+" "+moneySent);
-    //new Transaction('C', noeudBlock+" creates "+Block+" "+deep);
+    //new Transaction('C', "Noeud_Block port creation "+nP1.participantID+" "+moneySent);
+    //new Transaction('C', "Noeud_Block port creates "+Block+" "+deep);
     //new Transaction('I', nP1.participantID+" to "+noeudBlock);
     private char type;
     private String data; //Différentes selon le type de données qu'on a

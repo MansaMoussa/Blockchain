@@ -8,7 +8,13 @@ import java.util.Random;
 
 public class Noeud_Participant implements Serializable{
     private BigDecimal earnings_for_work_done;
+    public int merit;
     public BigDecimal participantID;
+
+    public Noeud_Participant(){
+      earnings_for_work_done = BigDecimal.ZERO;
+      merit = 1;
+    }
 
     public boolean proof_of_work_for_more_earnings(){
       boolean answer = false;
