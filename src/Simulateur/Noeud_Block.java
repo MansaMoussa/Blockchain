@@ -87,7 +87,7 @@ public class Noeud_Block{
               //my_NoeudBlockImpl.check_waitingListTransaction_vs_blockTransaction(my_NoeudBlockImpl.my_BlockchainImpl.sendBlockList().getLast());
               System.out.println("\nmy Heiiight "+my_NoeudBlockImpl.my_BlockchainImpl.getHeight());
               System.out.println("\nHis Heiiight "+blockchain_Peer.getHeight()+"\n");
-              if(blockchain_Peer.getHeight().compareTo(my_NoeudBlockImpl.my_BlockchainImpl.getHeight())==0){
+              if(blockchain_Peer.getHeight() == my_NoeudBlockImpl.my_BlockchainImpl.getHeight()){
                     System.out.println("\nmy Time "+my_NoeudBlockImpl.my_BlockchainImpl.sendBlockList().getLast().getTimeStamp());
                     System.out.println("\nHis Time "+blockchain_Peer.sendBlockList().getLast().getTimeStamp()+"\n");
                     //Dans ce cas on prends celui qui existe depuis longtemps
@@ -96,7 +96,7 @@ public class Noeud_Block{
                        System.out.println("\n I N S I D E  v1\n");
                     }
               }
-              else if(blockchain_Peer.getHeight().compareTo(my_NoeudBlockImpl.my_BlockchainImpl.getHeight())==1){
+              else if(blockchain_Peer.getHeight() > my_NoeudBlockImpl.my_BlockchainImpl.getHeight()){
                     my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(blockchain_Peer.sendBlockList());
                     System.out.println("\n I N S I D E  v2\n");
               }
@@ -112,7 +112,7 @@ public class Noeud_Block{
               my_NoeudBlockImpl.my_BlockchainImpl.check_waitingListTransaction_vs_blockTransaction(my_NoeudBlockImpl.waiting_transaction_list);
               if(my_NoeudBlockImpl.my_BlockchainImpl.getLastBlock().getCreator().equals("Noeud_Block "+my_NoeudBlockImpl.MyPort)){
                 my_NoeudBlockImpl.addONEZer();
-                System.out.println("\nWe have now "+my_NoeudBlockImpl.getBlockMoney()+" Zer :)\n");
+                System.out.println("\nWe have now "+my_NoeudBlockImpl.getBlockMoney()+" $Zer :)\n");
               }
 
             }

@@ -12,8 +12,8 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
 		public LinkedList<NoeudBlock> neighbours ;
 		//Ceux qui sont inscrits à moi
 		public LinkedList<Noeud_Participant> participants ;
-    private BigDecimal reward_for_bloc_creation;
-    public Integer max_participant = 10;
+    private Integer reward_for_bloc_creation;
+    public int max_participant = 10;
     //my blockchain that I share to others or update when others share theirs
     public BlockchainImpl my_BlockchainImpl;
     //liste chaînée des opérations à transcrire
@@ -26,7 +26,7 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
       neighbours = new LinkedList<NoeudBlock>();
       participants = new LinkedList<Noeud_Participant>();
 			waiting_transaction_list = new LinkedList<Transaction>();
-			reward_for_bloc_creation = new BigDecimal(2);
+			reward_for_bloc_creation = 0;
       //blocksList = new LinkedList<Block>();
     };
 
@@ -58,12 +58,12 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
         }*/
     }
 
-		public BigDecimal getBlockMoney() throws RemoteException{
+		public int getBlockMoney() throws RemoteException{
 				return this.reward_for_bloc_creation;
 		}
 
 		public void addONEZer() throws RemoteException{
-				this.reward_for_bloc_creation.add(new BigDecimal(1));
+				this.reward_for_bloc_creation++;
 		}
 
 

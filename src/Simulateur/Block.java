@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class Block implements Serializable{
     //A quel profondeur de la blockchain se situe ce block
-    private BigDecimal profondeur;
+    private int profondeur;
     //Hash du block précedent
     private String hashPreviousBlock;
     //Mon Hash
@@ -21,7 +21,7 @@ public class Block implements Serializable{
     //List of Transactions that are inside of the block
     private LinkedList<Transaction> transactionsList;
 
-    public Block(BigDecimal prof, String hashPreviousBlock,
+    public Block(int prof, String hashPreviousBlock,
                   String creatorName, LinkedList<Transaction> transactionsList){
         this.profondeur = prof;
         this.hashPreviousBlock = hashPreviousBlock;
@@ -68,7 +68,7 @@ public class Block implements Serializable{
     }
 
     //Retourne la profondeur du Block
-    public BigDecimal getHeight(){
+    public int getHeight(){
         return this.profondeur;
     }
 
