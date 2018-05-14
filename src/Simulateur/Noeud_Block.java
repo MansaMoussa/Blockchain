@@ -84,7 +84,7 @@ public class Noeud_Block{
               my_NoeudBlockImpl.my_BlockchainImpl =
                   my_NoeudBlockImpl.my_BlockchainImpl.createNewBlock(my_NoeudBlockImpl.waiting_transaction_list, my_NoeudBlockImpl.participants, 10, args[0]);
 
-              //my_NoeudBlockImpl.check_waitingListTransaction_vs_blockTransaction(my_NoeudBlockImpl.my_BlockchainImpl.sendBlockList().getLast());
+
               System.out.println("\nmy Heiiight "+my_NoeudBlockImpl.my_BlockchainImpl.getHeight());
               System.out.println("\nHis Heiiight "+blockchain_Peer.getHeight()+"\n");
               if(blockchain_Peer.getHeight() == my_NoeudBlockImpl.my_BlockchainImpl.getHeight()){
@@ -112,9 +112,8 @@ public class Noeud_Block{
               my_NoeudBlockImpl.my_BlockchainImpl.check_waitingListTransaction_vs_blockTransaction(my_NoeudBlockImpl.waiting_transaction_list);
               if(my_NoeudBlockImpl.my_BlockchainImpl.getLastBlock().getCreator().equals("Noeud_Block "+my_NoeudBlockImpl.MyPort)){
                 my_NoeudBlockImpl.addONEZer();
-                System.out.println("\nWe have now "+my_NoeudBlockImpl.getBlockMoney()+" $Zer :)\n");
+                System.out.println("\nThis have now "+my_NoeudBlockImpl.getBlockMoney()+" $coin (^_^)\n");
               }
-
             }
         }
         catch (NotBoundException re) { System.out.println(re) ; }

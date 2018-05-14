@@ -76,6 +76,7 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
         }
 
 
+        //Ecrire aussi dans la waiting_list
         Block b = new Block(prof, hashPreviousBlock, creatorName, new LinkedList<Transaction>());
 
         BigDecimal try_nonce = new BigDecimal(Math.random());
@@ -277,7 +278,7 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
     throws RemoteException{
       int pNumber = participants.size();
       for(Noeud_Participant p : participants){
-        BigDecimal money = new BigDecimal((1*p.merit)/pNumber);
+        BigDecimal money = new BigDecimal(( (double)1*p.merit)/pNumber );
         Transaction t = new Transaction('C', "Noeud_Block "+myPort+" creation "+p.participantID+" "+money);
         b.addTransaction(t);
       }
