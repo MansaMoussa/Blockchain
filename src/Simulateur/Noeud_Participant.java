@@ -7,12 +7,10 @@ import java.util.Random;
 //import Transaction;
 
 public class Noeud_Participant implements Serializable{
-    private BigDecimal earnings_for_work_done;
     public int merit;
     public BigDecimal participantID;
 
     public Noeud_Participant(){
-      earnings_for_work_done = BigDecimal.ZERO;
       merit = 1;
     }
 
@@ -22,6 +20,10 @@ public class Noeud_Participant implements Serializable{
         answer =  isPrime((int)Math.random());
       }catch(Exception e){System.out.println(e); e.printStackTrace();}
       return answer;
+    }
+
+    public void setMerit(int newMerit){
+      this.merit = newMerit;
     }
 
     private boolean isPrime(int number)
@@ -89,6 +91,12 @@ public class Noeud_Participant implements Serializable{
                 catch (RemoteException re) { System.out.println(re) ; }
                 catch (MalformedURLException e) { System.out.println(e) ; }
             }
+
+            //How much money do I have
+
+            //I wanna send that money to
+
+
        }
     }
 }

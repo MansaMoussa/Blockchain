@@ -97,16 +97,15 @@ public class Noeud_Block{
 
 
               if(hisHeight == myHeight){
-
-                BigDecimal myTimeStamp = my_NoeudBlockImpl.my_BlockchainImpl.sendBlockList().getLast().getTimeStamp();
-                BigDecimal hisTimeStamp = blockchain_Peer.sendBlockList().getLast().getTimeStamp();
-                    System.out.println("\nmy Time "+ myTimeStamp);
-                    System.out.println("\nHis Time "+hisTimeStamp+"\n");
-                    //Dans ce cas on prends celui qui existe depuis longtemps
-                    if(hisTimeStamp.compareTo(myTimeStamp)!=1){
-                       my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(blockchain_Peer.sendBlockList(), myHeight);
-                       System.out.println("\n I N S I D E  v1\n");
-                    }
+                  BigDecimal myTimeStamp = my_NoeudBlockImpl.my_BlockchainImpl.sendBlockList().getLast().getTimeStamp();
+                  BigDecimal hisTimeStamp = blockchain_Peer.sendBlockList().getLast().getTimeStamp();
+                  System.out.println("\nmy Time "+ myTimeStamp);
+                  System.out.println("\nHis Time "+hisTimeStamp+"\n");
+                  //Dans ce cas on prends celui qui existe depuis longtemps
+                  if(hisTimeStamp.compareTo(myTimeStamp)!=1){
+                     my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(blockchain_Peer.sendBlockList(), hisHeight);
+                     System.out.println("\n I N S I D E  v1\n");
+                  }
               }
               else if(hisHeight > myHeight){
                     my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(blockchain_Peer.sendBlockList());
