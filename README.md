@@ -5,24 +5,14 @@ How to build ?
 
 Make sure you've cleaned everything before trying to build something
 
-	cd src/Simulateur/Noeud_Block1/
-	./build
-	cd src/Simulateur/Noeud_Block2/
-	./build
-	cd src/Simulateur/Noeud_Participant1_NB1/
-	./build
-	cd src/Simulateur/Noeud_Participant3_NB2/
-	./build
+	cd src/Simulateur/
+	./buildN1.sh	#On a first console
+	./buildN2.sh	#On a second console
+	./buildP1.sh	#On a third console
+	./buildP2.sh	#On a fourth console
+	./buildP3.sh	#On a fifth console 
 
 How to clean ?
 
-	cd src/Simulateur/Noeud_Block1/
-	./destroy
-	cd src/Simulateur/Noeud_Block2/
-	./destroy
-	cd src/Simulateur/Noeud_Participant1_NB1/
-	./destroy
-	cd src/Simulateur/Noeud_Participant3_NB2/
-	./destroy
-
-
+	cd src/Simulateur/
+	./destroy.sh

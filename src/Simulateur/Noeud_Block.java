@@ -35,9 +35,9 @@ public class Noeud_Block{
         int max = 2;
         int min =  0;
         ArrayList<Integer> intArray = new ArrayList<Integer>();
-        intArray.add(300);
-        intArray.add(1000);
-        intArray.add(9000);
+        intArray.add(30);
+        intArray.add(500);
+        intArray.add(7000);
 
         LinkedList<Transaction> waiting_transaction_list = new LinkedList<Transaction>();
         NoeudBlockImpl my_NoeudBlockImpl = null;
@@ -85,28 +85,39 @@ public class Noeud_Block{
                   my_NoeudBlockImpl.my_BlockchainImpl.createNewBlock(my_NoeudBlockImpl.waiting_transaction_list, my_NoeudBlockImpl.participants, 10, args[0]);
 
 
-              System.out.println("\nmy Heiiight "+my_NoeudBlockImpl.my_BlockchainImpl.getHeight());
-              System.out.println("\nHis Heiiight "+blockchain_Peer.getHeight()+"\n");
-              if(blockchain_Peer.getHeight() == my_NoeudBlockImpl.my_BlockchainImpl.getHeight()){
-                    System.out.println("\nmy Time "+my_NoeudBlockImpl.my_BlockchainImpl.sendBlockList().getLast().getTimeStamp());
-                    System.out.println("\nHis Time "+blockchain_Peer.sendBlockList().getLast().getTimeStamp()+"\n");
+
+              int myHeight = my_NoeudBlockImpl.my_BlockchainImpl.getHeight();
+              int hisHeight = blockchain_Peer.getHeight();
+
+              Thread.sleep(breakTime);//Le temps que je récupère l'info d'une manière synchronisée
+
+
+              System.out.println("\nmy Heiiight "+myHeight);
+              System.out.println("\nHis Heiiight "+hisHeight+"\n");
+
+
+              if(hisHeight == myHeight){
+
+                BigDecimal myTimeStamp = my_NoeudBlockImpl.my_BlockchainImpl.sendBlockList().getLast().getTimeStamp();
+                BigDecimal hisTimeStamp = blockchain_Peer.sendBlockList().getLast().getTimeStamp();
+                    System.out.println("\nmy Time "+ myTimeStamp);
+                    System.out.println("\nHis Time "+hisTimeStamp+"\n");
                     //Dans ce cas on prends celui qui existe depuis longtemps
-                    if(blockchain_Peer.sendBlockList().getLast().getTimeStamp().compareTo(my_NoeudBlockImpl.my_BlockchainImpl.sendBlockList().getLast().getTimeStamp())!=1){
-                       my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(blockchain_Peer.sendBlockList(), my_NoeudBlockImpl.my_BlockchainImpl.getHeight());
+                    if(hisTimeStamp.compareTo(myTimeStamp)!=1){
+                       my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(blockchain_Peer.sendBlockList(), myHeight);
                        System.out.println("\n I N S I D E  v1\n");
                     }
               }
-              else if(blockchain_Peer.getHeight() > my_NoeudBlockImpl.my_BlockchainImpl.getHeight()){
+              else if(hisHeight > myHeight){
                     my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(blockchain_Peer.sendBlockList());
                     System.out.println("\n I N S I D E  v2\n");
               }
 
-              try{
-                Random random = new Random();
-                waitAlea = random.nextInt(max+1-min) + min;
-                my_NoeudBlockImpl.my_BlockchainImpl.printMyBlockchain(args[0]);
-                Thread.sleep(intArray.get(waitAlea));
-              }catch(InterruptedException v) { System.out.println(v); }
+              Random random = new Random();
+              waitAlea = random.nextInt(max+1-min) + min;
+              my_NoeudBlockImpl.my_BlockchainImpl.printMyBlockchain(args[0]);
+              Thread.sleep(intArray.get(waitAlea));//On attend un nombre aléatoire afin de pertre les 2 de se concurencer
+
 
               //On supprime les opérations en attente déjà dans le dernier block
               my_NoeudBlockImpl.my_BlockchainImpl.check_waitingListTransaction_vs_blockTransaction(my_NoeudBlockImpl.waiting_transaction_list);
@@ -119,6 +130,7 @@ public class Noeud_Block{
         catch (NotBoundException re) { System.out.println(re) ; }
         catch (RemoteException re) { System.out.println(re) ; }
         catch (MalformedURLException e) { System.out.println(e) ; }
+        catch(InterruptedException v) { System.out.println(v); }
 
         ////////////////////on lance la pause avant de quitter////////////////////////
 
