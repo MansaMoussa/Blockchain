@@ -54,21 +54,21 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
         }*/
     }
 
-		public BigDecimal getBlockMoney(){
+		public BigDecimal getBlockMoney() throws RemoteException{
 				return this.reward_for_bloc_creation;
 		}
 
 		//On va supprimer les opérations de la wainting_list déjà contenu dans le block
     //On va supprimer ceux qui ont déjà été validées (ceux qui sont déjà dans le lastBlock)
-    public void check_waitingListTransaction_vs_blockTransaction(Block lastBlock){
+    public void check_waitingListTransaction_vs_blockTransaction() throws RemoteException{
         for(Transaction wainting_transaction : waiting_transaction_list)
-          for(Transaction block_transaction : lastBlock.getTransactionsList())
+          for(Transaction block_transaction : my_BlockchainImpl.getLastBlock().getTransactionsList())
               if(wainting_transaction.equals(block_transaction))
                   waiting_transaction_list.remove(wainting_transaction);
     }
 
 		//We won't write anything if the transaction is not valid
-		public void write_transaction(Transaction t){
+		public void write_transaction(Transaction t) throws RemoteException{
 				//Cette condition ne vaut que lorsqu'un échange
 				//de monnaie bloc est solicitée
 				if(t.getType() == 'E' && t.valid_transaction(my_BlockchainImpl))

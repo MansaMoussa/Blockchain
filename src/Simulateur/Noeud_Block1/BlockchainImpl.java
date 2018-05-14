@@ -14,7 +14,7 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
 
 
     public BigDecimal getHeight() throws RemoteException{
-        return new BigDecimal(this.blocksList.size());
+        return new BigDecimal(this.blocksList.size()).subtract(BigDecimal.ONE);
     }
 
     public BlockchainImpl() throws RemoteException{
@@ -106,6 +106,7 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
                     new Transaction('C', creatorName+" creates Block "+prof);
             b.addTransaction(creationTransaction);
             this.blocksList.addLast(b);
+            //Il faut donner de la thune aux participants
             bc = new BlockchainImpl(this.blocksList);
         }
         //Il va falloir l'envoyer aux Noeud_Block voisins afin qu'ils n'encréent
@@ -136,7 +137,7 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
 
     public void setBlockList(LinkedList<Block> bc, BigDecimal height) throws RemoteException{
     //private void setBlockList(LinkedList<Block> bc) throws RemoteException{
-        int prof = height.intValueExact() -1;
+        int prof = height.intValueExact();
         this.blocksList.remove(prof);
         this.blocksList.add(prof, bc.get(prof));//getLast??
         //this.blocksList = bc;
