@@ -61,10 +61,16 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
 		//On va supprimer les opérations de la wainting_list déjà contenu dans le block
     //On va supprimer ceux qui ont déjà été validées (ceux qui sont déjà dans le lastBlock)
     public void check_waitingListTransaction_vs_blockTransaction() throws RemoteException{
-        for(Transaction wainting_transaction : waiting_transaction_list)
-          for(Transaction block_transaction : my_BlockchainImpl.getLastBlock().getTransactionsList())
+
+				for(Transaction block_transaction : this.my_BlockchainImpl.getLastBlock().getTransactionsList())
+        		for(Transaction wainting_transaction : this.waiting_transaction_list)
               if(wainting_transaction.equals(block_transaction))
                   waiting_transaction_list.remove(wainting_transaction);
+
+				for(Transaction wainting_transaction : this.waiting_transaction_list)
+						for(Transaction block_transaction : this.my_BlockchainImpl.getLastBlock().getTransactionsList())
+							if(wainting_transaction.equals(block_transaction))
+									waiting_transaction_list.remove(wainting_transaction);
     }
 
 		//We won't write anything if the transaction is not valid

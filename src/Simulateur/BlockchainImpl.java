@@ -33,7 +33,7 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
         display.append("\n#####################################################");
         display.append("\n#**\tBLOCKCHAIN  FROM  Noeud_Block "+myPort);
         display.append("\n#***************************************************#");
-        for(Block b : blocksList)
+        for(Block b : this.blocksList)
             b.printBlock(display);
         display.append("\n#####################################################");
 
@@ -76,7 +76,8 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
         }
 
 
-        Block b = new Block(prof, hashPreviousBlock, creatorName, transactionsList);
+        //Block b = new Block(prof, hashPreviousBlock, creatorName, transactionsList);
+        Block b = new Block(prof, hashPreviousBlock, creatorName, new LinkedList<Transaction>());
 
         BigDecimal try_nonce = new BigDecimal(Math.random());
 
@@ -114,6 +115,18 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
         return bc;
     }
 
+    public void delete_creation_transac_try(LinkedList<Transaction> transactionsList, String myPort)
+    throws RemoteException{
+        // BigDecimal prof = getLastBlock().getHeight();
+        // Transaction creationTransaction =
+        //       new Transaction('C', "Noeud_Block "+myPort+" creates Block "+prof);
+        //
+        // for(Transaction t : transactionsList)
+        //     if(t.equals(creationTransaction))
+      	// 					transactionsList.remove(creationTransaction);
+        transactionsList.removeLast();
+    }
+
     //On vérifie si ce nonce donné en paramètre permet d'obtenir un nombre
     //premier au début de la chaîne du Hash de ce block donné en
     //paramètre ex.: hash = "abcde..." et abcde || abcd || abc est premier
@@ -136,14 +149,16 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
     }
 
     public void setBlockList(LinkedList<Block> bc, BigDecimal height) throws RemoteException{
-    //private void setBlockList(LinkedList<Block> bc) throws RemoteException{
         int prof = height.intValueExact();
         this.blocksList.remove(prof);
-        this.blocksList.add(prof, bc.get(prof));//getLast??
-        //this.blocksList = bc;
-        //this.blocksList.removeLast();
-        //this.blocksList.addLast(bc.getLast());
+        this.blocksList.add(prof, bc.get(prof));
     }
+
+    public void setBlockList(LinkedList<Block> bc) throws RemoteException{
+          this.blocksList = bc;
+    }
+
+
 
     public LinkedList<Block> sendBlockList() throws RemoteException{
         return blocksList;

@@ -47,7 +47,7 @@ public class Block implements Serializable{
         display.append("\n#---------------------------------------------------#");
         display.append("\n#-- Nonce : "+this.nonce);
         display.append("\n#---------------------------------------------------#");
-        for(Transaction t : transactionsList)
+        for(Transaction t : this.transactionsList)
             t.printTransaction(display);
         display.append("\n#***************************************************#");
 
