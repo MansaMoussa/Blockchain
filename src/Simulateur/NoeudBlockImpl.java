@@ -90,6 +90,11 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
 			return this.my_BlockchainImpl.sendBlockList();
 		}
 
+		public BigDecimal howMuchMoneyDoesAParticipantHas(BigDecimal participantID)
+		throws RemoteException{
+			return this.my_BlockchainImpl.howMuchMoneyDoesAParticipantHas(participantID);
+		}
+
 
 		//We won't write anything if the transaction is not valid
 		public void write_transactionTowaitingList(Transaction t) throws RemoteException{

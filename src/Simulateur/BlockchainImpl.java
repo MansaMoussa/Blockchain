@@ -197,7 +197,8 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
     }
 
     //His money is the sum of all he got minus all he'd sent
-    private BigDecimal howMuchMoneyDoesAParticipantHas(Noeud_Participant nP){
+    private BigDecimal howMuchMoneyDoesAParticipantHas(Noeud_Participant nP)
+    throws RemoteException{
       BigDecimal moneyReceived = new BigDecimal(0);
       BigDecimal moneySent = new BigDecimal(0);
 
@@ -215,16 +216,17 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
     }
 
 
-    public BigDecimal howMuchMoneyDoesAParticipantHas(BigDecimal participantID){
+    public BigDecimal howMuchMoneyDoesAParticipantHas(BigDecimal participantID)
+    throws RemoteException{
       BigDecimal moneyReceived = new BigDecimal(0);
       BigDecimal moneySent = new BigDecimal(0);
 
-      for(Block b : blocksList)
+      for(Block b : this.blocksList)
         for(Transaction t : b.getTransactionsList())
           moneyReceived = moneyReceived.add(t.moneyReceivedOf(participantID));
 
 
-      for(Block b : blocksList)
+      for(Block b : this.blocksList)
         for(Transaction t : b.getTransactionsList())
           moneySent = moneySent.add(t.moneySentOf(participantID));
 
@@ -232,7 +234,8 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
       return moneyReceived.subtract(moneySent);
     }
 
-    private BigDecimal sendMoneyFromTo(Noeud_Participant nP1, Noeud_Participant nP2, BigDecimal moneySent){
+    private BigDecimal sendMoneyFromTo(Noeud_Participant nP1, Noeud_Participant nP2, BigDecimal moneySent)
+    throws RemoteException{
       BigDecimal nP1Money = howMuchMoneyDoesAParticipantHas(nP1);
       BigDecimal sendThis = BigDecimal.ZERO;
 

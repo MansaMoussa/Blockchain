@@ -17,16 +17,16 @@ public class Noeud_Block{
         //vraiment le vrai (en recalculant le trucZer)
     }
 
-*/
+    */
 
     ///////////////////////////////////////////////////////////////////
     ///////////////////C'est ici que ça se passe///////////////////////
     ///////////////////////////////////////////////////////////////////
 
     public static void main(String [] args){
-        if (args.length != 4)
+        if (args.length != 2)
         {
-            System.out.println("Usage : java Noeud_Block <port de mon serveur> <port de mon peer> <port de mon blockchain> <port de mon peer>") ;
+            System.out.println("Usage : java Noeud_Block <port de mon serveur> <port de mon peer>") ;
             System.exit(0) ;
         }
 
@@ -44,17 +44,14 @@ public class Noeud_Block{
         ///////////////////on lance le serveur///////////////////////
         try{
 
-        	  System.out.println("test "+ args[0] + " " + args[1] + " " + args[2] + " " + args[3]);
+        	  System.out.println("test "+ args[0] + " " + args[1]);
 
             my_NoeudBlockImpl = new NoeudBlockImpl();
             my_NoeudBlockImpl.MyPort = Integer.parseInt(args[0]);
             Naming.rebind("rmi://127.0.0.1:"+args[0]+"/NoeudBlock", my_NoeudBlockImpl);
-            System.out.println("\nSERVER Noeud_Block AT PORT "+args[0]+" LAUNCHED!!\n") ;
+            System.out.println("\nSERVER Noeud_Block AT PORT "+args[0]+" LAUNCHED!!\n");
 
             my_NoeudBlockImpl.my_BlockchainImpl = new BlockchainImpl(); //My blockchain is created
-            Naming.rebind("rmi://127.0.0.1:"+args[2]+"/Blockchain",my_NoeudBlockImpl.my_BlockchainImpl) ;
-            System.out.println("\nSERVER Block_Chain AT PORT "+args[2]+" LAUNCHED!!\n") ;
-
             my_NoeudBlockImpl.my_BlockchainImpl.printMyBlockchain(args[0]);
 
         }
@@ -71,19 +68,12 @@ public class Noeud_Block{
         try{
 
             NoeudBlock noeudBlock_Peer = (NoeudBlock)Naming.lookup("rmi://127.0.0.1:"+args[1]+"/NoeudBlock");
-            // my_NoeudBlockImpl.
-            // noeudBlock_Peer.port = Integer.parseInt(args[1]);
+
             noeudBlock_Peer.connectToNoeudBlockNoeud(noeudBlock_Peer);
             noeudBlock_Peer.afficheListNoeuds();
-            //noeudBlock_Peer.connectToNoeudBlockNoeud(noeudBlock_Peer);
-
-            Blockchain blockchain_Peer =
-                                (Blockchain) Naming.lookup("rmi://127.0.0.1:"+args[3]+"/Blockchain");
-
-
-            //noeudBlock_Peer.my_BlockchainImpl = (BlockchainImpl) blockchain_Peer.clone();
 
             while(true){
+              System.out.println("\n\n");
               my_NoeudBlockImpl.my_BlockchainImpl =
                   my_NoeudBlockImpl.my_BlockchainImpl.createNewBlock(my_NoeudBlockImpl.waiting_transaction_list, my_NoeudBlockImpl.participants, 10, args[0]);
 
@@ -91,7 +81,6 @@ public class Noeud_Block{
               Random random = new Random();
               waitAlea = random.nextInt(max+1-min) + min;
               int myHeight = my_NoeudBlockImpl.my_BlockchainImpl.getHeight();
-              //int hisHeight = blockchain_Peer.getHeight();
               int hisHeight = noeudBlock_Peer.getMy_BlockchainImplHeight();
 
               Thread.sleep(intArray.get(waitAlea));//Le temps que je récupère l'info d'une manière synchronisée
@@ -106,12 +95,11 @@ public class Noeud_Block{
                   //Dans ce cas on prends celui qui existe depuis longtemps que moi
                   if(hisTimeStamp.compareTo(myTimeStamp)!=1){
                      my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(noeudBlock_Peer.getBlockList());
-                     //System.out.println("\n I N S I D E  v1\n");
+
                   }
               }
               else if(hisHeight > myHeight){
                     my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(noeudBlock_Peer.getBlockList());
-                    //System.out.println("\n I N S I D E  v2\n");
               }
 
 
@@ -130,8 +118,5 @@ public class Noeud_Block{
         catch (RemoteException re) { System.out.println(re) ; }
         catch (MalformedURLException e) { System.out.println(e) ; }
         catch(InterruptedException v) { System.out.println(v); }
-
-        ////////////////////on lance la pause avant de quitter////////////////////////
-
     }
 }

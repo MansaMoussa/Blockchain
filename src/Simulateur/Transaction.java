@@ -2,6 +2,7 @@ import java.math.BigDecimal;
 import java.lang.StringBuilder;
 import java.util.StringTokenizer;
 import java.io.Serializable;
+import java.rmi.RemoteException ;
 
 public class Transaction implements Serializable{
     //Transaction form
@@ -84,7 +85,8 @@ public class Transaction implements Serializable{
     }
 
     //Remetre les transactions du bloc non valid dans la liste d'attente
-		public boolean valid_transaction(BlockchainImpl bc){
+		public boolean valid_transaction(BlockchainImpl bc)
+    throws RemoteException{
 				//Possède t-il ce qu'il veut dépenser?
 				//Vérifions ça dans la BlockchainImpl
 				boolean answer= true;

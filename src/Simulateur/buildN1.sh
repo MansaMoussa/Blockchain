@@ -10,7 +10,7 @@ rmic NoeudBlockImpl
 
 
 ################################################################################
-####  I'll be waiting for 5sec in order to let my peer to launch his server ####
+####  I'll be waiting for 10sec in order to let my peer to launch his server ####
 ################################################################################
 rmiregistry 2222 &
 rmiregistry 1234 &
@@ -21,4 +21,4 @@ rmiregistry 1234 &
 #******************************** S T A R T ***********************************#
 #******************************************************************************#
 #******************************* Noeud_Block1 *********************************#
-java -Djava.security.manager -Djava.security.policy=java.policy Noeud_Block 2222 4242 1234 5678
+java -Djava.security.manager -Djava.security.policy=java.policy Noeud_Block 2222 4242

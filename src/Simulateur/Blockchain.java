@@ -17,4 +17,6 @@ public interface Blockchain extends Remote, Serializable{
 
     public LinkedList<Block> sendBlockList() throws RemoteException;
 
+    public BigDecimal howMuchMoneyDoesAParticipantHas(BigDecimal nP)
+    throws RemoteException;
 }

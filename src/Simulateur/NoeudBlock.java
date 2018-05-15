@@ -16,4 +16,6 @@ public interface NoeudBlock extends Remote, Serializable {
     public int getMyPort() throws RemoteException;
     public BigDecimal getMy_BlockchainImplLastBlockTimeStamp()throws RemoteException;
     public LinkedList<Block> getBlockList()throws RemoteException;
+    public BigDecimal howMuchMoneyDoesAParticipantHas(BigDecimal participantID)
+		throws RemoteException;
 }

@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Noeud_Participant implements Serializable{
     public int merit;
-    public BigDecimal participantID;
+    public BigDecimal participantID; // = null!
 
     public Noeud_Participant(){
       merit = 1;
@@ -38,7 +38,7 @@ public class Noeud_Participant implements Serializable{
     }
 
     public BigDecimal getParticipantID(){
-      return this.participantID;
+      return participantID;
     }
 
 
@@ -58,11 +58,10 @@ public class Noeud_Participant implements Serializable{
                 np.participantID = new BigDecimal(args[1]);
                 int attenteRandom = 10000 + (int)(Math.random() * ((70000 - 10000) + 1));
                 System.out.println(attenteRandom);
-                 try{
-                      System.out.println("Bonjour je suis le Noeud Participant " + args[1] + ". Je souhaite me connecter au Noeud Block " + args[0]);
-                      Thread.sleep(1000);
-                }
-                catch(InterruptedException v) { System.out.println(v); }
+
+                System.out.println("Bonjour je suis le Noeud Participant " + args[1] + ". Je souhaite me connecter au Noeud Block " + args[0]);
+                Thread.sleep(1000);
+
 
 
                 NoeudBlock noeudblock_Peer =
@@ -73,30 +72,29 @@ public class Noeud_Participant implements Serializable{
 
                 noeudblock_Peer.connectToNoeudBlockParticipant(np);
                 noeudblock_Peer.afficheListParticipants();
+
+
+                // Blockchain blockchain_Peer =
+                //           (Blockchain) Naming.lookup("rmi://localhost:"+args[0]+"/Blockchain") ;
+                // System.out.println(blockchain_Peer.printBlockchainImpl(args[0]));
+
+
+
+                int breakTime = 10000;
+
+                // Le temps qu'on crée un notre participant à qui je peux envoyer de la monnaie
+                Thread.sleep(breakTime);
+                // How much money do I have
+                BigDecimal myMoney = noeudblock_Peer.howMuchMoneyDoesAParticipantHas(np.getParticipantID());
+                System.out.println("\nI have "+myMoney+"\n");
+
+                // I wanna send that money to
+
             }
             catch (NotBoundException re) { System.out.println(re) ; }
             catch (RemoteException re) { System.out.println(re) ; }
             catch (MalformedURLException e) { System.out.println(e) ; }
-            if (args.length != 1)
-                System.out.println("Usage : java Noeud_Participant <port du serveur à qui je veux demande des services>") ;
-            else{
-
-                try{
-                    Blockchain blockchain_Peer =
-                                        (Blockchain) Naming.lookup("rmi://localhost:"+args[0]+"/Blockchain") ;
-                    System.out.println(blockchain_Peer.printBlockchainImpl(args[0]));
-
-                }
-                catch (NotBoundException re) { System.out.println(re) ; }
-                catch (RemoteException re) { System.out.println(re) ; }
-                catch (MalformedURLException e) { System.out.println(e) ; }
-            }
-
-            //How much money do I have
-
-            //I wanna send that money to
-
-
+            catch(InterruptedException v) { System.out.println(v); }
        }
     }
 }
