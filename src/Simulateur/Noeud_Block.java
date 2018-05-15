@@ -106,12 +106,12 @@ public class Noeud_Block{
                   //Dans ce cas on prends celui qui existe depuis longtemps que moi
                   if(hisTimeStamp.compareTo(myTimeStamp)!=1){
                      my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(noeudBlock_Peer.getBlockList());
-                     System.out.println("\n I N S I D E  v1\n");
+                     //System.out.println("\n I N S I D E  v1\n");
                   }
               }
               else if(hisHeight > myHeight){
                     my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(noeudBlock_Peer.getBlockList());
-                    System.out.println("\n I N S I D E  v2\n");
+                    //System.out.println("\n I N S I D E  v2\n");
               }
 
 
