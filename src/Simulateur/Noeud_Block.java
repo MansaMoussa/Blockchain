@@ -36,8 +36,8 @@ public class Noeud_Block{
         int min =  0;
         ArrayList<Integer> intArray = new ArrayList<Integer>();
         intArray.add(30);
-        intArray.add(500);
-        intArray.add(7000);
+        intArray.add(600);
+        intArray.add(9000);
 
         LinkedList<Transaction> waiting_transaction_list = new LinkedList<Transaction>();
         NoeudBlockImpl my_NoeudBlockImpl = null;
@@ -80,16 +80,21 @@ public class Noeud_Block{
             Blockchain blockchain_Peer =
                                 (Blockchain) Naming.lookup("rmi://127.0.0.1:"+args[3]+"/Blockchain");
 
+
+            //noeudBlock_Peer.my_BlockchainImpl = (BlockchainImpl) blockchain_Peer.clone();
+
             while(true){
               my_NoeudBlockImpl.my_BlockchainImpl =
                   my_NoeudBlockImpl.my_BlockchainImpl.createNewBlock(my_NoeudBlockImpl.waiting_transaction_list, my_NoeudBlockImpl.participants, 10, args[0]);
 
 
-
+              Random random = new Random();
+              waitAlea = random.nextInt(max+1-min) + min;
               int myHeight = my_NoeudBlockImpl.my_BlockchainImpl.getHeight();
-              int hisHeight = blockchain_Peer.getHeight();
+              //int hisHeight = blockchain_Peer.getHeight();
+              int hisHeight = noeudBlock_Peer.getMy_BlockchainImplHeight();
 
-              Thread.sleep(breakTime);//Le temps que je récupère l'info d'une manière synchronisée
+              Thread.sleep(intArray.get(waitAlea));//Le temps que je récupère l'info d'une manière synchronisée
 
 
               System.out.println("\nmy Heiiight "+myHeight);
@@ -97,23 +102,27 @@ public class Noeud_Block{
 
 
               if(hisHeight == myHeight){
-                  BigDecimal myTimeStamp = my_NoeudBlockImpl.my_BlockchainImpl.sendBlockList().getLast().getTimeStamp();
-                  BigDecimal hisTimeStamp = blockchain_Peer.sendBlockList().getLast().getTimeStamp();
+                  BigDecimal myTimeStamp = my_NoeudBlockImpl.my_BlockchainImpl.getLastBlock().getTimeStamp();
+                  //BigDecimal hisTimeStamp = blockchain_Peer.sendBlockList().getLast().getTimeStamp();
+                  BigDecimal hisTimeStamp = noeudBlock_Peer.getMy_BlockchainImplLastBlockTimeStamp();
+
                   System.out.println("\nmy Time "+ myTimeStamp);
                   System.out.println("\nHis Time "+hisTimeStamp+"\n");
-                  //Dans ce cas on prends celui qui existe depuis longtemps
+                  //Dans ce cas on prends celui qui existe depuis longtemps que moi
                   if(hisTimeStamp.compareTo(myTimeStamp)!=1){
-                     my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(blockchain_Peer.sendBlockList(), hisHeight);
+                     //my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(blockchain_Peer.sendBlockList(), hisHeight);
+                     //my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(blockchain_Peer.sendBlockList());
+                     my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(noeudBlock_Peer.getBlockList());
                      System.out.println("\n I N S I D E  v1\n");
                   }
               }
               else if(hisHeight > myHeight){
-                    my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(blockchain_Peer.sendBlockList());
+                    //my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(blockchain_Peer.sendBlockList());
+                    my_NoeudBlockImpl.my_BlockchainImpl.setBlockList(noeudBlock_Peer.getBlockList());
                     System.out.println("\n I N S I D E  v2\n");
               }
 
-              Random random = new Random();
-              waitAlea = random.nextInt(max+1-min) + min;
+
               my_NoeudBlockImpl.my_BlockchainImpl.printMyBlockchain(args[0]);
               Thread.sleep(intArray.get(waitAlea));//On attend un nombre aléatoire afin de pertre les 2 de se concurencer
 
@@ -121,7 +130,6 @@ public class Noeud_Block{
               //On supprime les opérations en attente déjà dans le dernier block
               my_NoeudBlockImpl.my_BlockchainImpl.check_waitingListTransaction_vs_blockTransaction(my_NoeudBlockImpl.waiting_transaction_list);
               if(my_NoeudBlockImpl.my_BlockchainImpl.getLastBlock().getCreator().equals("Noeud_Block "+my_NoeudBlockImpl.MyPort)){
-                my_NoeudBlockImpl.addONEZer();
                 System.out.println("\nThis have now "+my_NoeudBlockImpl.getBlockMoney()+" $coin (^_^)\n");
               }
             }

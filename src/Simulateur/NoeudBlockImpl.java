@@ -9,11 +9,12 @@ import java.lang.StringBuilder;
 import java.math.BigDecimal;
 
 public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
-		public LinkedList<NoeudBlock> neighbours ;
+		//List de mes voisins
+		public LinkedList<NoeudBlock> neighbours;
 		//Ceux qui sont inscrits à moi
 		public LinkedList<Noeud_Participant> participants ;
     private Integer reward_for_bloc_creation;
-    public int max_participant = 10;
+    private int max_participant = 10;
     //my blockchain that I share to others or update when others share theirs
     public BlockchainImpl my_BlockchainImpl;
     //liste chaînée des opérations à transcrire
@@ -27,12 +28,11 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
       participants = new LinkedList<Noeud_Participant>();
 			waiting_transaction_list = new LinkedList<Transaction>();
 			reward_for_bloc_creation = 0;
-      //blocksList = new LinkedList<Block>();
     };
 
     public void connectToNoeudBlockParticipant(Noeud_Participant np) throws RemoteException {
 
-				if(participants.size()<=max_participant){ //Tant qu'on a pas atteint le nombre max de participant
+				if(participants.size()<=this.max_participant){ //Tant qu'on a pas atteint le nombre max de participant
 					Transaction t = new Transaction('I', np.participantID+" to Noeud_Block "+MyPort);
 					write_transactionTowaitingList(t);
 	        participants.add(np);
@@ -45,18 +45,20 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
 
 
     public void afficheListParticipants() throws RemoteException {
-        System.out.println("Mes participants : ");
-        for(Noeud_Participant n : participants) {
+        System.out.println("Participants connected to me : ");
+        for(Noeud_Participant n : this.participants) {
             System.out.println(n.participantID + " ");
         }
     }
 
 		public void afficheListNoeuds() throws RemoteException {
-        /*System.out.println("Mes voisins : ");
-        for(NoeudBlock n : neighbours) {
-            System.out.println(n.port + " ");
-        }*/
+        System.out.println("I'm in peer-to-peer with (neighbours): ");
+        for(NoeudBlock n : this.neighbours) {
+            System.out.println(n.getMyPort() + " ");
+        }
     }
+
+
 
     public void afficheNbVoisins() throws RemoteException {
         System.out.println("J'ai " + neighbours.size() + " voisins.");
@@ -64,11 +66,28 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
     }
 
 		public int getBlockMoney() throws RemoteException{
-				return this.reward_for_bloc_creation;
+				int money = 0;
+				for(Block b : this.my_BlockchainImpl.sendBlockList())
+					if(b.getCreator().equals("Noeud_Block "+this.MyPort))
+							money++;
+
+				return money;
 		}
 
-		public void addONEZer() throws RemoteException{
-				this.reward_for_bloc_creation++;
+		public int getMy_BlockchainImplHeight() throws RemoteException{
+			return this.my_BlockchainImpl.getHeight();
+		}
+
+		public int getMyPort() throws RemoteException{
+			return this.MyPort;
+		}
+
+		public BigDecimal getMy_BlockchainImplLastBlockTimeStamp()throws RemoteException{
+			return this.my_BlockchainImpl.sendBlockList().getLast().getTimeStamp();
+		}
+
+		public LinkedList<Block> getBlockList()throws RemoteException{
+			return this.my_BlockchainImpl.sendBlockList();
 		}
 
 

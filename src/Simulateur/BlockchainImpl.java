@@ -158,7 +158,7 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
     }
 
     public void setBlockList(LinkedList<Block> bc) throws RemoteException{
-          this.blocksList = bc;
+          this.blocksList = (LinkedList<Block>) bc.clone();
     }
 
 
