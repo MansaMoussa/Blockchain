@@ -53,7 +53,7 @@ public class Noeud_Participant implements Serializable{
       else{
           try{
                 np.participantID = new BigDecimal(args[1]);
-                int breakTime = 40000;
+                int breakTime = 1000;
                 int attenteRandom = 10000 + (int)(Math.random() * ((70000 - 10000) + 1));
                 System.out.println(attenteRandom);
 
@@ -85,7 +85,7 @@ public class Noeud_Participant implements Serializable{
                 System.out.println("#***************************************************#");
 
                 if(args.length == 4){
-                  noeudblock_Peer.sendMoneyFromTo(np, new BigDecimal(args[2]), new BigDecimal(args[3]));
+                  noeudblock_Peer.sendMoneyFromTo(np.participantID, new BigDecimal(args[2]), new BigDecimal(args[3]));
                 }
 
                 // I wanna send that money to

@@ -13,7 +13,7 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
 		//List de mes voisins
 		public LinkedList<NoeudBlock> neighbours;
 		//Ceux qui sont inscrits à moi
-		public LinkedList<Noeud_Participant> participants ;
+		public LinkedList<Noeud_Participant> participants;
 		//The hash map where the participantID (key) and theirs merit (value) are saved
 		public HashMap hashMap_merit_participants;
 		//The number max of participant
@@ -94,18 +94,15 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
 				return money;
 		}
 
-		public void sendMoneyFromTo(Noeud_Participant nP1, BigDecimal participant2ID, BigDecimal moneySent)
+		public void sendMoneyFromTo(BigDecimal participant1ID, BigDecimal participant2ID, BigDecimal moneySent)
     throws RemoteException{
-			for(Noeud_Participant p : this.participants)
-					if(p.participantID.compareTo(participant2ID) == 0){
-						BigDecimal nP1Money = this.my_BlockchainImpl.howMuchMoneyDoesAParticipantHas(nP1.participantID);
-			       //nP1Money>=moneySent
-			      if(nP1Money.compareTo(moneySent) != -1){
-			          Transaction t = new Transaction('E', nP1.participantID+" to "+participant2ID+" "+moneySent);
-			          this.waiting_transaction_list.add(t);
-								System.out.println("\n!!!!!\tMoney Sent : But wait for the blockchain confirmation !!!!");
-			      }
-					}
+				BigDecimal nP1Money = this.my_BlockchainImpl.howMuchMoneyDoesAParticipantHas(participant1ID);
+			  //nP1Money>=moneySent
+			  if(nP1Money.compareTo(moneySent) != -1){
+			    Transaction t = new Transaction('E', participant1ID+" to "+participant2ID+" "+moneySent);
+			    this.waiting_transaction_list.add(t);
+					System.out.println("\n!!!!!\tMoney Sent : But wait for the blockchain confirmation !!!!");
+			  }
     }
 
 		public int getMy_BlockchainImplHeight() throws RemoteException{

@@ -18,6 +18,6 @@ public interface NoeudBlock extends Remote, Serializable {
     public LinkedList<Block> getBlockList()throws RemoteException;
     public BigDecimal howMuchMoneyDoesAParticipantHas(BigDecimal participantID)
 		throws RemoteException;
-    public void sendMoneyFromTo(Noeud_Participant nP1, BigDecimal participant2ID, BigDecimal moneySent)
+    public void sendMoneyFromTo(BigDecimal participant1ID, BigDecimal participant2ID, BigDecimal moneySent)
     throws RemoteException;
 }
