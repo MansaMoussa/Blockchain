@@ -3,10 +3,12 @@ import java.rmi.RemoteException ;
 import java.net.InetAddress.* ;
 import java.net.* ;
 import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.Random;
 import java.security.MessageDigest;
 import java.lang.StringBuilder;
 import java.math.BigDecimal;
-import java.util.Random;
+import java.math.RoundingMode;
 
 public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
 
@@ -57,8 +59,8 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
     }
 
     //Here will try to create a new Block
-    public BlockchainImpl createNewBlock(LinkedList<Transaction> waiting_T_List, LinkedList<Noeud_Participant> participants, int secondsToSleep, String myPort)
-    throws RemoteException{
+    public BlockchainImpl createNewBlock(LinkedList<Transaction> waiting_T_List, LinkedList<Noeud_Participant> participants,
+    HashMap participantsEarnings, int secondsToSleep, String myPort) throws RemoteException{
         BlockchainImpl bc = new BlockchainImpl(this.blocksList);
         int prof = 0;//
         String creatorName = "Noeud_Block "+myPort;
@@ -107,7 +109,7 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
                     new Transaction('C', creatorName+" creates Block "+prof);
             b.addTransaction(creationTransaction);
             this.blocksList.add(b);
-            creationMoneyTransaction(b, participants, myPort);
+            creationMoneyTransaction(b, participants, participantsEarnings, myPort);
             //Il faut donner de la thune aux participants
             bc = new BlockchainImpl(this.blocksList);
         }
@@ -196,25 +198,6 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
         return hash.toString();
     }
 
-    //His money is the sum of all he got minus all he'd sent
-    private BigDecimal howMuchMoneyDoesAParticipantHas(Noeud_Participant nP)
-    throws RemoteException{
-      BigDecimal moneyReceived = new BigDecimal(0);
-      BigDecimal moneySent = new BigDecimal(0);
-
-      for(Block b : blocksList)
-        for(Transaction t : b.getTransactionsList())
-          moneyReceived = moneyReceived.add(t.moneyReceivedOf(nP.getParticipantID()));
-
-
-      for(Block b : blocksList)
-        for(Transaction t : b.getTransactionsList())
-          moneySent = moneySent.add(t.moneySentOf(nP.getParticipantID()));
-
-
-      return moneyReceived.subtract(moneySent);
-    }
-
 
     public BigDecimal howMuchMoneyDoesAParticipantHas(BigDecimal participantID)
     throws RemoteException{
@@ -225,27 +208,15 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
         for(Transaction t : b.getTransactionsList())
           moneyReceived = moneyReceived.add(t.moneyReceivedOf(participantID));
 
+      System.out.println("\n"+participantID+" has : "+moneyReceived);
 
       for(Block b : this.blocksList)
         for(Transaction t : b.getTransactionsList())
           moneySent = moneySent.add(t.moneySentOf(participantID));
 
+      System.out.println("\n"+participantID+" sent : "+moneySent);
 
       return moneyReceived.subtract(moneySent);
-    }
-
-    private BigDecimal sendMoneyFromTo(Noeud_Participant nP1, Noeud_Participant nP2, BigDecimal moneySent)
-    throws RemoteException{
-      BigDecimal nP1Money = howMuchMoneyDoesAParticipantHas(nP1);
-      BigDecimal sendThis = BigDecimal.ZERO;
-
-       //nP1Money>=moneySent
-      if(nP1Money.compareTo(moneySent) == 1 || nP1Money.compareTo(moneySent) == 0){
-          Transaction t = new Transaction('E', nP1.participantID+" to "+nP2.participantID+" "+moneySent);
-          sendThis = moneySent;
-      }
-
-      return sendThis;
     }
 
     //On va supprimer les opérations de la wainting_list déjà contenu dans le block
@@ -277,11 +248,15 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
 
     }
 
-    public void creationMoneyTransaction(Block b, LinkedList<Noeud_Participant> participants, String myPort)
-    throws RemoteException{
-      int pNumber = participants.size();
+    public void creationMoneyTransaction(Block b, LinkedList<Noeud_Participant> participants,
+                          HashMap participantsEarnings,String myPort) throws RemoteException{
+      BigDecimal pNumber = new BigDecimal(participants.size());
       for(Noeud_Participant p : participants){
-        BigDecimal money = new BigDecimal(( (double)1*p.merit)/pNumber );
+        BigDecimal participantMerit = new BigDecimal((int) participantsEarnings.get(p.getParticipantID()));
+
+        System.out.println("\n"+p.participantID+" MERIIIIT : "+participantMerit);
+
+        BigDecimal money = participantMerit.divide(pNumber, 3, RoundingMode.CEILING);
         Transaction t = new Transaction('C', "Noeud_Block "+myPort+" creation "+p.participantID+" "+money);
         b.addTransaction(t);
       }

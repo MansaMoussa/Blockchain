@@ -3,6 +3,7 @@ import java.rmi.RemoteException ;
 import java.net.InetAddress.* ;
 import java.net.* ;
 import java.util.LinkedList;
+import java.util.HashMap;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.lang.StringBuilder;
@@ -13,7 +14,9 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
 		public LinkedList<NoeudBlock> neighbours;
 		//Ceux qui sont inscrits à moi
 		public LinkedList<Noeud_Participant> participants ;
-    private Integer reward_for_bloc_creation;
+		//The hash map where the participantID (key) and theirs merit (value) are saved
+		public HashMap hashMap_merit_participants;
+		//The number max of participant
     private int max_participant = 10;
     //my blockchain that I share to others or update when others share theirs
     public BlockchainImpl my_BlockchainImpl;
@@ -27,15 +30,25 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
       neighbours = new LinkedList<NoeudBlock>();
       participants = new LinkedList<Noeud_Participant>();
 			waiting_transaction_list = new LinkedList<Transaction>();
-			reward_for_bloc_creation = 0;
+			hashMap_merit_participants = new HashMap();
     };
 
-    public void connectToNoeudBlockParticipant(Noeud_Participant np) throws RemoteException {
-
+    public void connectToNoeudBlockParticipant(Noeud_Participant np)
+		throws RemoteException {
+				boolean alreadyExist = false;
 				if(participants.size()<=this.max_participant){ //Tant qu'on a pas atteint le nombre max de participant
-					Transaction t = new Transaction('I', np.participantID+" to Noeud_Block "+MyPort);
-					write_transactionTowaitingList(t);
-	        participants.add(np);
+					for(Noeud_Participant p : this.participants)
+						if(p.participantID.compareTo(np.participantID) == 0)
+								alreadyExist = true;
+
+					//On ne l'inscrit que s'il n'existe pas encore
+					if(!alreadyExist){
+						Transaction t = new Transaction('I', np.participantID+" to Noeud_Block "+MyPort);
+						write_transactionTowaitingList(t);
+						participants.add(np);
+						//On crée une entrée avec l'ID du participant comme KEY et le merit comme VALUE
+						hashMap_merit_participants.put(np.participantID, 1);
+					}
 				}
     }
 
@@ -58,7 +71,14 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
         }
     }
 
-
+		//On vérifie si le participant a bien travaillé
+		public void check_Participants_proof_of_work()
+				throws RemoteException {
+				for(Noeud_Participant nP : participants)
+					if(nP.proof_of_work_for_more_earnings()){
+							this.hashMap_merit_participants.put(nP.participantID, new Integer(((int)this.hashMap_merit_participants.get(nP.participantID))+1));
+					}
+		}
 
     public void afficheNbVoisins() throws RemoteException {
         System.out.println("J'ai " + neighbours.size() + " voisins.");
@@ -73,6 +93,20 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
 
 				return money;
 		}
+
+		public void sendMoneyFromTo(Noeud_Participant nP1, BigDecimal participant2ID, BigDecimal moneySent)
+    throws RemoteException{
+			for(Noeud_Participant p : this.participants)
+					if(p.participantID.compareTo(participant2ID) == 0){
+						BigDecimal nP1Money = this.my_BlockchainImpl.howMuchMoneyDoesAParticipantHas(nP1.participantID);
+			       //nP1Money>=moneySent
+			      if(nP1Money.compareTo(moneySent) != -1){
+			          Transaction t = new Transaction('E', nP1.participantID+" to "+participant2ID+" "+moneySent);
+			          this.waiting_transaction_list.add(t);
+								System.out.println("\n!!!!!\tMoney Sent : But wait for the blockchain confirmation !!!!");
+			      }
+					}
+    }
 
 		public int getMy_BlockchainImplHeight() throws RemoteException{
 			return this.my_BlockchainImpl.getHeight();

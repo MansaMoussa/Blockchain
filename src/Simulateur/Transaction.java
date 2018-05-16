@@ -37,13 +37,27 @@ public class Transaction implements Serializable{
     public BigDecimal moneyReceivedOf(BigDecimal iD){
       BigDecimal money = new BigDecimal(0);
       //He earn money from exchanges or from blocks CREATION
-      if((this.type == 'E')||(this.type == 'C')){
+      if(this.type == 'E'){
         StringTokenizer st = new StringTokenizer(this.data, " ");
         int i = 0;
-        while (st.hasMoreTokens()){
+        while (st.hasMoreTokens()){// ex.: "167 to 267 0,5"
           String dataContent = st.nextToken();
-          //Because we know that iD is the second element or a Block for a creation
+          //Because we know that iD is the second element for an Exchange
           if(i == 2 && dataContent.equals(iD.toString())){
+            System.out.println("IIIIID received "+dataContent);
+            //Because we know that the money value is the third element
+            money = new BigDecimal(st.nextToken());
+          }
+          i++;
+        }
+      }
+      else if(this.type == 'C'){
+        StringTokenizer st = new StringTokenizer(this.data, " ");
+        int i = 0;
+        while (st.hasMoreTokens()){// ex.: "Noeud_Block 2222 creation 267 0,5"
+          String dataContent = st.nextToken();
+          //Because we know that iD is the third element for a "creation" (except for "creates")
+          if(i == 3 && dataContent.equals(iD.toString())){
             //Because we know that the money value is the third element
             money = new BigDecimal(st.nextToken());
           }
@@ -61,15 +75,16 @@ public class Transaction implements Serializable{
         int i = 0;
         while (st.hasMoreTokens()) {
           String dataContent = st.nextToken();
-          //Because we know that iD is the second element
+          //Because we know that iD is the first element
           if(i == 0 && dataContent.equals(iD.toString()))
           {
+            System.out.println("IIIIID sent "+dataContent);
             st.nextToken();// = to
             st.nextToken();// = the who had received money
             //Because we know that the money value is the third element
             money = new BigDecimal(st.nextToken());
           }
-          i++;
+          i++; //Pour ne plus faire pareil dans le cas où y a encore des éléments dans le st
         }
       }
       return money;

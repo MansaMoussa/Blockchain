@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.lang.StringBuilder;
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Noeud_Block{
     /*
@@ -74,8 +75,14 @@ public class Noeud_Block{
 
             while(true){
               System.out.println("\n\n");
+              //Before creating a new Block check if participants can earn more profits
+
+              my_NoeudBlockImpl.check_Participants_proof_of_work();
+
+
               my_NoeudBlockImpl.my_BlockchainImpl =
-                  my_NoeudBlockImpl.my_BlockchainImpl.createNewBlock(my_NoeudBlockImpl.waiting_transaction_list, my_NoeudBlockImpl.participants, 10, args[0]);
+                  my_NoeudBlockImpl.my_BlockchainImpl.createNewBlock(my_NoeudBlockImpl.waiting_transaction_list,
+                  my_NoeudBlockImpl.participants, my_NoeudBlockImpl.hashMap_merit_participants, 10, args[0]);
 
 
               Random random = new Random();
@@ -110,8 +117,12 @@ public class Noeud_Block{
               //On supprime les opérations en attente déjà dans le dernier block
               my_NoeudBlockImpl.my_BlockchainImpl.check_waitingListTransaction_vs_blockTransaction(my_NoeudBlockImpl.waiting_transaction_list);
               if(my_NoeudBlockImpl.my_BlockchainImpl.getLastBlock().getCreator().equals("Noeud_Block "+my_NoeudBlockImpl.MyPort)){
-                System.out.println("\nThis Noeud_Block has got now"+my_NoeudBlockImpl.getBlockMoney()+" $coin (^_^)\n");
+                System.out.println("\nThis Noeud_Block has got now "+my_NoeudBlockImpl.getBlockMoney()+" $coins (^_^)\n");
               }
+
+              ////////////////////on lance la pause avant d'essaie de créer à nouveau////////////////////////
+              Thread.sleep(breakTime);
+
             }
         }
         catch (NotBoundException re) { System.out.println(re) ; }
