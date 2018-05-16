@@ -123,13 +123,6 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
 
     public void delete_creation_transac_try(LinkedList<Transaction> transactionsList, String myPort)
     throws RemoteException{
-        // BigDecimal prof = getLastBlock().getHeight();
-        // Transaction creationTransaction =
-        //       new Transaction('C', "Noeud_Block "+myPort+" creates Block "+prof);
-        //
-        // for(Transaction t : transactionsList)
-        //     if(t.equals(creationTransaction))
-      	// 					transactionsList.remove(creationTransaction);
         transactionsList.removeLast();
     }
 

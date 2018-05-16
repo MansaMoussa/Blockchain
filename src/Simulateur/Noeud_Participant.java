@@ -87,10 +87,6 @@ public class Noeud_Participant implements Serializable{
                 if(args.length == 4){
                   noeudblock_Peer.sendMoneyFromTo(np.participantID, new BigDecimal(args[2]), new BigDecimal(args[3]));
                 }
-
-                // I wanna send that money to
-                //if(myMoney.compareTo(BigDecimal.ZERO) == 1) //If I've more myMoney > 0
-                  //send it to an other participant
             }
             catch (NotBoundException re) { System.out.println(re) ; }
             catch (RemoteException re) { System.out.println(re) ; }

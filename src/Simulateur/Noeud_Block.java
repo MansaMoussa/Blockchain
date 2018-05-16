@@ -8,22 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Noeud_Block{
-    /*
-    public void order_create_block(Noeud_Block nB){
-        //On doit lui dire qu'il crée un block dans sa liste d'attente(?)
-    }
-
-    public void check_blochain_no_corruption(BlockchainImpl b){
-        //Ici on pourrait simplement vérifier si chaque hash_précedent est
-        //vraiment le vrai (en recalculant le trucZer)
-    }
-
-    */
-
-    ///////////////////////////////////////////////////////////////////
-    ///////////////////C'est ici que ça se passe///////////////////////
-    ///////////////////////////////////////////////////////////////////
-
     public static void main(String [] args){
         if (args.length != 2)
         {
