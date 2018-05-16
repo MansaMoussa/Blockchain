@@ -59,8 +59,11 @@ public class Noeud_Block{
 
             while(true){
               System.out.println("\n\n");
-              //Before creating a new Block check if participants can earn more profits
 
+              //Check ask for waiting transaction you don't have
+              my_NoeudBlockImpl.ask_for_his_wainting_transaction(noeudBlock_Peer.sendWaiting_transaction_list());
+
+              //Before creating a new Block check if participants can earn more profits
               my_NoeudBlockImpl.check_Participants_proof_of_work();
 
 

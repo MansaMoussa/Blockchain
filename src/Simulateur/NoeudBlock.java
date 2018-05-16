@@ -20,4 +20,7 @@ public interface NoeudBlock extends Remote, Serializable {
 		throws RemoteException;
     public void sendMoneyFromTo(BigDecimal participant1ID, BigDecimal participant2ID, BigDecimal moneySent)
     throws RemoteException;
+    public void ask_for_his_wainting_transaction(LinkedList<Transaction> his_wainting_transactions)
+		throws RemoteException;
+    public LinkedList<Transaction> sendWaiting_transaction_list() throws RemoteException;
 }

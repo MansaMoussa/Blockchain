@@ -126,6 +126,23 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
 			return this.my_BlockchainImpl.howMuchMoneyDoesAParticipantHas(participantID);
 		}
 
+		public void ask_for_his_wainting_transaction(LinkedList<Transaction> his_wainting_transactions)
+		throws RemoteException{
+			boolean found = false;
+			for(Transaction his_T : his_wainting_transactions){
+				for(Transaction my_T : this.waiting_transaction_list)
+						if(my_T.equals(his_T))
+							found = true;
+
+				if(!found)
+					this.waiting_transaction_list.add(his_T);
+			}
+		}
+
+		public LinkedList<Transaction> sendWaiting_transaction_list() throws RemoteException{
+				return this.waiting_transaction_list;
+		}
+
 
 		//We won't write anything if the transaction is not valid
 		public void write_transactionTowaitingList(Transaction t) throws RemoteException{
