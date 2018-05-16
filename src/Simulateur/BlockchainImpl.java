@@ -238,7 +238,7 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
       for(Noeud_Participant p : participants){
         BigDecimal participantMerit = new BigDecimal((int) participantsEarnings.get(p.getParticipantID()));
 
-        System.out.println("\n"+p.participantID+" MERIIIIT : "+participantMerit);
+        System.out.println("\n"+p.participantID+" MERIT : "+participantMerit);
 
         BigDecimal money = participantMerit.divide(pNumber, 3, RoundingMode.CEILING);
         Transaction t = new Transaction('C', "Noeud_Block "+myPort+" creation "+p.participantID+" "+money);
