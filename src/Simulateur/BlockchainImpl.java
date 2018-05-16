@@ -113,7 +113,7 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
             //Il faut donner de la thune aux participants
             bc = new BlockchainImpl(this.blocksList);
         }
-
+        bc.check_waitingListTransaction_vs_blockTransaction(waiting_T_List);
         bc.write_transactionToBlock(waiting_T_List);
 
         //Il va falloir l'envoyer aux Noeud_Block voisins afin qu'ils n'encréent
@@ -201,13 +201,9 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
         for(Transaction t : b.getTransactionsList())
           moneyReceived = moneyReceived.add(t.moneyReceivedOf(participantID));
 
-      System.out.println("\n"+participantID+" has : "+moneyReceived);
-
       for(Block b : this.blocksList)
         for(Transaction t : b.getTransactionsList())
           moneySent = moneySent.add(t.moneySentOf(participantID));
-
-      System.out.println("\n"+participantID+" sent : "+moneySent);
 
       return moneyReceived.subtract(moneySent);
     }
@@ -216,13 +212,8 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
     //On va supprimer ceux qui ont déjà été validées (ceux qui sont déjà dans le lastBlock)
     public void check_waitingListTransaction_vs_blockTransaction(LinkedList<Transaction> wt_list)
     throws RemoteException{
-        for(Transaction block_transaction : getLastBlock().getTransactionsList())
+          for(Transaction block_transaction : this.getLastBlock().getTransactionsList())
             for(Transaction wainting_transaction : wt_list)
-              if(wainting_transaction.equals(block_transaction))
-                  wt_list.remove(wainting_transaction);
-
-        for(Transaction wainting_transaction : wt_list)
-            for(Transaction block_transaction : getLastBlock().getTransactionsList())
               if(wainting_transaction.equals(block_transaction))
                   wt_list.remove(wainting_transaction);
     }

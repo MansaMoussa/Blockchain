@@ -44,7 +44,6 @@ public class Transaction implements Serializable{
           String dataContent = st.nextToken();
           //Because we know that iD is the second element for an Exchange
           if(i == 2 && dataContent.equals(iD.toString())){
-            System.out.println("IIIIID received "+dataContent);
             //Because we know that the money value is the third element
             money = new BigDecimal(st.nextToken());
           }

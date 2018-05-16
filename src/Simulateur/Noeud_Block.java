@@ -28,9 +28,6 @@ public class Noeud_Block{
         NoeudBlockImpl my_NoeudBlockImpl = null;
         ///////////////////on lance le serveur///////////////////////
         try{
-
-        	  System.out.println("test "+ args[0] + " " + args[1]);
-
             my_NoeudBlockImpl = new NoeudBlockImpl();
             my_NoeudBlockImpl.MyPort = Integer.parseInt(args[0]);
             Naming.rebind("rmi://127.0.0.1:"+args[0]+"/NoeudBlock", my_NoeudBlockImpl);
@@ -66,7 +63,6 @@ public class Noeud_Block{
               //Before creating a new Block check if participants can earn more profits
               my_NoeudBlockImpl.check_Participants_proof_of_work();
 
-
               my_NoeudBlockImpl.my_BlockchainImpl =
                   my_NoeudBlockImpl.my_BlockchainImpl.createNewBlock(my_NoeudBlockImpl.waiting_transaction_list,
                   my_NoeudBlockImpl.participants, my_NoeudBlockImpl.hashMap_merit_participants, 10, args[0]);
@@ -80,8 +76,6 @@ public class Noeud_Block{
               Thread.sleep(intArray.get(waitAlea));//Le temps que je récupère l'info d'une manière synchronisée
 
 
-              //System.out.println("\nmy Heiiight "+myHeight);
-              //System.out.println("\nHis Heiiight "+hisHeight+"\n");
               if(hisHeight == myHeight){
                   BigDecimal myTimeStamp = my_NoeudBlockImpl.my_BlockchainImpl.getLastBlock().getTimeStamp();
                   BigDecimal hisTimeStamp = noeudBlock_Peer.getMy_BlockchainImplLastBlockTimeStamp();
@@ -99,7 +93,6 @@ public class Noeud_Block{
 
               my_NoeudBlockImpl.my_BlockchainImpl.printMyBlockchain(args[0]);
               Thread.sleep(intArray.get(waitAlea));//On attend un nombre aléatoire afin de pertre les 2 de se concurencer
-
 
               //On supprime les opérations en attente déjà dans le dernier block
               my_NoeudBlockImpl.my_BlockchainImpl.check_waitingListTransaction_vs_blockTransaction(my_NoeudBlockImpl.waiting_transaction_list);

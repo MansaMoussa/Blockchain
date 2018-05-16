@@ -17,8 +17,7 @@ public class Noeud_Participant implements Serializable{
         int range = (max - min) + 1;
         int primeNumber = (int)(Math.random() * range) + min;
         answer =  isPrime(primeNumber);
-        System.out.println("\nPrime number = "+primeNumber);
-        System.out.println("\nanswer = "+answer);
+        System.out.println("Does "+this.participantID+" deserve more earnings? : "+answer+"\n");
       }catch(Exception e){System.out.println(e); e.printStackTrace();}
 
       return answer;
