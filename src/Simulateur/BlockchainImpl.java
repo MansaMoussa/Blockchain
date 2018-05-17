@@ -59,8 +59,9 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
     }
 
     //Here will try to create a new Block
-    public BlockchainImpl createNewBlock(LinkedList<Transaction> waiting_T_List, LinkedList<Noeud_Participant> participants,
+    public BlockchainImpl createNewBlock(LinkedList<Transaction> waiting_t_List, LinkedList<Noeud_Participant> participants,
     HashMap participantsEarnings, int secondsToSleep, String myPort) throws RemoteException{
+        LinkedList<Transaction> waiting_T_List = (LinkedList<Transaction>) waiting_t_List.clone();
         BlockchainImpl bc = new BlockchainImpl(this.blocksList);
         int prof = 0;//
         String creatorName = "Noeud_Block "+myPort;
@@ -87,10 +88,12 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
 
         //On vérifier s'il y a un time_out ou qu'on a deviné le bon nonce
         while(i < secondsToSleep || !(primeNumber_found = check_if_good_nonce(b, try_nonce))){
-
+          bc = new BlockchainImpl(this.blocksList);
           try_nonce = new BigDecimal(Math.random());
           //We will sleep every 1 sec
           try{
+            if(!this.blocksList.isEmpty())
+                bc.check_waitingListTransaction_vs_blockTransaction(waiting_T_List);
             Thread.sleep(1);
           }catch(InterruptedException v) { System.out.println(v); }
           if(secondsToSleep == i+1)
@@ -113,7 +116,7 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
             //Il faut donner de la thune aux participants
             bc = new BlockchainImpl(this.blocksList);
         }
-        bc.check_waitingListTransaction_vs_blockTransaction(waiting_T_List);
+
         bc.write_transactionToBlock(waiting_T_List);
 
         //Il va falloir l'envoyer aux Noeud_Block voisins afin qu'ils n'encréent
@@ -210,12 +213,13 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
 
     //On va supprimer les opérations de la wainting_list déjà contenu dans le block
     //On va supprimer ceux qui ont déjà été validées (ceux qui sont déjà dans le lastBlock)
-    public void check_waitingListTransaction_vs_blockTransaction(LinkedList<Transaction> wt_list)
+    public void check_waitingListTransaction_vs_blockTransaction(LinkedList<Transaction> wT_list)
     throws RemoteException{
+          LinkedList<Transaction> wt_list = (LinkedList<Transaction>) wT_list.clone();
           for(Transaction block_transaction : this.getLastBlock().getTransactionsList())
             for(Transaction wainting_transaction : wt_list)
               if(wainting_transaction.equals(block_transaction))
-                  wt_list.remove(wainting_transaction);
+                  wT_list.remove(wainting_transaction);
     }
 
     public void write_transactionToBlock(LinkedList<Transaction> waiting_T_List)
