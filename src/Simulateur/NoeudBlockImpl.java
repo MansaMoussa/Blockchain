@@ -43,7 +43,6 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
 
 					//On ne l'inscrit que s'il n'existe pas encore
 					if(!alreadyExist){
-						System.out.println("\n"+np.participantID+" n'existe pas eeeeencoreZEER\n");
 						Transaction t = new Transaction('I', np.participantID+" to Noeud_Block "+MyPort);
 						write_transactionTowaitingList(t);
 						participants.add(np);
@@ -143,7 +142,6 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
 		public LinkedList<Transaction> sendWaiting_transaction_list() throws RemoteException{
 				return this.waiting_transaction_list;
 		}
-
 
 		//We won't write anything if the transaction is not valid
 		public void write_transactionTowaitingList(Transaction t) throws RemoteException{
