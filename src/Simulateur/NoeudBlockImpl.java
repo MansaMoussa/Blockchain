@@ -43,6 +43,7 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
 
 					//On ne l'inscrit que s'il n'existe pas encore
 					if(!alreadyExist){
+						System.out.println("\n"+np.participantID+" n'existe pas eeeeencoreZEER\n");
 						Transaction t = new Transaction('I', np.participantID+" to Noeud_Block "+MyPort);
 						write_transactionTowaitingList(t);
 						participants.add(np);
@@ -149,8 +150,8 @@ public class NoeudBlockImpl extends UnicastRemoteObject implements NoeudBlock{
 				//Cette condition ne vaut que lorsqu'un échange
 				//de monnaie bloc est solicitée
 				if(t.getType() == 'E' && t.valid_transaction(my_BlockchainImpl))
-						waiting_transaction_list.addLast(t);
+						this.waiting_transaction_list.addLast(t);
 				else if((t.getType() == 'C')||(t.getType() == 'I'))
-						waiting_transaction_list.addLast(t);
+						this.waiting_transaction_list.addLast(t);
 		}
 }

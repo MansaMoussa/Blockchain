@@ -59,9 +59,8 @@ public class BlockchainImpl extends UnicastRemoteObject implements Blockchain{
     }
 
     //Here will try to create a new Block
-    public BlockchainImpl createNewBlock(LinkedList<Transaction> waiting_t_List, LinkedList<Noeud_Participant> participants,
+    public BlockchainImpl createNewBlock(LinkedList<Transaction> waiting_T_List, LinkedList<Noeud_Participant> participants,
     HashMap participantsEarnings, int secondsToSleep, String myPort) throws RemoteException{
-        LinkedList<Transaction> waiting_T_List = (LinkedList<Transaction>) waiting_t_List.clone();
         BlockchainImpl bc = new BlockchainImpl(this.blocksList);
         int prof = 0;//
         String creatorName = "Noeud_Block "+myPort;
